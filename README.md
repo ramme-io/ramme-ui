@@ -2,34 +2,27 @@
 
 [![NPM Version](https://img.shields.io/npm/v/@ramme-io/create-app.svg)](https://www.npmjs.com/package/@ramme-io/ui) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**The structural frame for the modern web.**
+**The blocks for the build kit.**
 
-Ramme UI is a curated bundle of industry-standard libraries, accessible components, and architectural best practices designed for rapid prototyping.
-
-It creates a "Golden Path" for product designers and engineers who need to validate ideas quickly without getting bogged down in configuration. By bundling the best open-source tools into a cohesive system, Ramme allows you to build high-fidelity, interactive prototypes that are production-ready from day one.
+Ramme UI is a basic bundle of standard, accessible components, and best practices ready for rapid prototyping.
 
 ---
 
-## The Architecture
-Ramme (Danish for "Frame") is not about reinventing the wheel. It is about providing a solid steel frame so you can focus on the walls and windows.
+## The Basics
 
-We have orchestrated the most robust third-party libraries in the ecosystem into a single, opinionated toolkit:
+We have collected popular third-party libraries into a single build kit:
 
 * **Engine:** React 19+
-* **Styling:** Tailwind CSS (configured for rapid iteration)
-* **Primitives:** Radix UI (for unstyled, accessible interactive elements)
-* **Motion:** Framer Motion (for high-fidelity interaction design)
+* **Styling:** Tailwind CSS 
+* **Primitives:** Radix UI 
+* **Motion:** Framer Motion 
 * **Icons:** Lucide React
-
-This is not a "walled garden." It is a standardized set of building materials that respects your need for speed and flexibility.
 
 ---
 
 ## Quick Start
 
-The fastest way to start building is to use our CLI tool, which scaffolds a Vite-powered application with the Ramme Design System pre-configured.
-
-Run the following command in your terminal:
+To spin up a new project, run the initialization command in your terminal. This will generate a new folder with all resources linked and configured.
 
 *(Replace `my-new-project` with your desired folder name).*
 
@@ -41,11 +34,11 @@ This single command will:
 1.  **Scaffold** a high-performance Vite project structure.
 2.  **Install** React 19, TypeScript, and Tailwind CSS.
 3.  **Configure** the `@ramme-io/ui` component library and design tokens.
-4.  **Optimize** linting and build settings for immediate deployment.
+4.  **Optimize** limited configuration for customization.
 
 ---
 
-## Launch Sequence
+## Getting Started
 
 Once the scaffolding is complete, initialize your local environment:
 
@@ -60,18 +53,18 @@ pnpm install
 # or npm install
 ```
 
-**3. Ignite the dev server**
+**3. Start the dev server**
 ```bash
 pnpm run dev
 ```
 
-Your prototype is now live at `http://localhost:5173`.
+Your prototype is running locally at `http://localhost:5173`.
 
 ---
 
 ## The Tech Stack
 
-This starter kit is not a proprietary framework; it is an opinionated orchestration of the best open-source tools available:
+This starter kit is an opinionated selection of the best open-source tools available:
 
 * **Vite:** Next-generation tooling for instant server start and lightning-fast HMR (Hot Module Replacement).
 * **React:** The standard library for building composable user interfaces.
@@ -130,7 +123,7 @@ export default LandingPage;
 
 ## Local Development
 
-If you want to contribute to the framework or customize the primitives, you can run our component workbench locally.
+If you want to contribute to the project or customize the primitives, you can run our component workbench locally.
 
 1. Install Dependencies:
 
@@ -145,18 +138,16 @@ pnpm run storybook
 ```
 ---
 
-## The Ramme Ecosystem
-
-This tool is part of a suite of developer resources maintained by **Excesspool Limited Liability Company**:
+## Project Links
 
 * **`@ramme-io/ui`**: The core library of visual primitives.
-* **`@ramme-io/create-app`** (This Repository): The CLI scaffolding tool.
+* **`@ramme-io/create-app`** (This Repository): The quick start kit.
 
 ---
 
 ## Contributing
 
-We welcome contributions from the community. Please fork the repository and submit a pull request. For major architectural changes, please open an issue first to discuss the proposed direction.
+We welcome contributions from the community. Just fork the repository and submit a pull request. For major changes, please open an issue first to discuss.
 
 ## License
 
