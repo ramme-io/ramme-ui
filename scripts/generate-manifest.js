@@ -1,9 +1,39 @@
-// packages/ui/scripts/generate-manifest.js
 const fs = require('fs');
 const path = require('path');
 const doctrine = require('doctrine');
 
-// Function to find all relevant source files
+// Mapping singular categories to manifest keys
+// UPDATED: Added mappings for your new architecture
+const CATEGORY_MAP = {
+  // --- Standard UI ---
+  component: 'components',
+  components: 'components',
+  ui: 'components',
+  input: 'components',
+  form: 'components',
+  feedback: 'components',
+  navigation: 'components',
+  'data-display': 'components',
+  
+  // --- Structure ---
+  layout: 'layouts',
+  layouts: 'layouts',
+  
+  // --- Business Logic (Blocks) ---
+  // We map these to 'components' because to the AI, they are just bigger components.
+  // Alternatively, you could add a new 'blocks' key to the manifest if you want strict separation.
+  iot: 'components', 
+  ai: 'components',
+  blocks: 'components',
+
+  // --- Logic/Utils ---
+  util: 'utils',
+  utils: 'utils',
+  hook: 'hooks',
+  hooks: 'hooks',
+  data: 'data'
+};
+
 const getSourceFiles = (dir) => {
   let files = [];
   const items = fs.readdirSync(dir, { withFileTypes: true });
@@ -12,7 +42,6 @@ const getSourceFiles = (dir) => {
     if (item.isDirectory()) {
       files = [...files, ...getSourceFiles(fullPath)];
     } else if (item.name.endsWith('.tsx') || item.name.endsWith('.ts')) {
-      // Exclude test files and storybook files
       if (!item.name.endsWith('.test.tsx') && !item.name.endsWith('.stories.tsx')) {
         files.push(fullPath);
       }
@@ -21,16 +50,22 @@ const getSourceFiles = (dir) => {
   return files;
 };
 
-// Function to parse the JSDoc comments from a file's content
-const parseJsDoc = (content) => {
-  const docRegex = /\/\*\*\s*@wizard([\s\S]*?)\*\//g;
+// Updated parseJsDoc to handle empty tags safely
+const parseJsDoc = (content, filePath) => {
+  const docRegex = /\/\*\*([\s\S]*?)\*\//g;
   const entries = [];
   let match;
 
   while ((match = docRegex.exec(content)) !== null) {
     const jsdoc = `/**${match[1]}*/`;
     const ast = doctrine.parse(jsdoc, { unwrap: true, sloppy: true });
-    
+
+    // Check if this block is a wizard block
+    const isWizard = ast.tags.some(tag => tag.title === 'wizard');
+    if (!isWizard) continue;
+
+    console.log(`🔍 Found @wizard in: ${filePath}`);
+
     const entry = {
       name: '',
       description: ast.description || '',
@@ -40,39 +75,50 @@ const parseJsDoc = (content) => {
     };
 
     for (const tag of ast.tags) {
+      // SAFETY FIX: Ensure description exists before using it
+      const desc = tag.description || ''; 
+
       switch (tag.title) {
         case 'name':
-          entry.name = tag.description;
+          entry.name = tag.name || desc;
           break;
         case 'description':
-          entry.description = tag.description;
+          entry.description = desc;
           break;
         case 'tags':
-          entry.tags = tag.description.split(',').map(t => t.trim());
+          entry.tags = desc.split(',').map(t => t.trim()).filter(Boolean);
           break;
         case 'category':
-          entry.category = tag.description;
+          // Normalize category string for mapping
+          entry.category = desc.toLowerCase().trim();
           break;
         case 'props':
-          // Handle multi-line YAML-like props
-          entry.props = tag.description.split('\\n- ').map(propStr => {
-            if (!propStr.trim()) return null;
-            const propLines = propStr.trim().split('\\n');
-            const prop = {};
-            propLines.forEach(line => {
-              const [key, ...valueParts] = line.split(':');
-              const value = valueParts.join(':').trim();
-              if (key && value) {
-                prop[key.trim().replace('-', '')] = value;
-              }
-            });
-            return prop;
-          }).filter(Boolean);
+          // SAFETY FIX: If desc is empty, skip splitting
+          if (!desc) break;
+
+          entry.props = desc
+            .split(/(?:\r?\n|^)- /)
+            .map(propStr => {
+              if (!propStr.trim()) return null;
+              const propLines = propStr.trim().split(/\r?\n/);
+              const prop = {};
+              propLines.forEach(line => {
+                const separatorIndex = line.indexOf(':');
+                if (separatorIndex === -1) return;
+                const key = line.slice(0, separatorIndex).trim();
+                const value = line.slice(separatorIndex + 1).trim();
+                if (key && value) {
+                  prop[key.replace(/^- /, '')] = value;
+                }
+              });
+              return prop;
+            }).filter(Boolean);
           break;
       }
     }
-    
-    if (entry.name && entry.category) {
+
+    if (entry.name) {
+      console.log(`   ✅ Parsed: ${entry.name}`);
       entries.push(entry);
     }
   }
@@ -80,8 +126,9 @@ const parseJsDoc = (content) => {
   return entries;
 };
 
-// Main function to build and write the manifest
 const buildManifest = () => {
+  console.log('🚀 Starting Manifest Generation...');
+  
   const manifest = {
     components: [],
     layouts: [],
@@ -92,38 +139,45 @@ const buildManifest = () => {
 
   const srcDir = path.resolve(__dirname, '../src');
   const files = getSourceFiles(srcDir);
+  let totalEntries = 0;
 
   for (const file of files) {
     const content = fs.readFileSync(file, 'utf-8');
-    const entries = parseJsDoc(content);
     const filePath = path.relative(path.join(__dirname, '..'), file).replace(/\\\\/g, '/');
+    const entries = parseJsDoc(content, filePath);
 
     for (const entry of entries) {
       entry.filePath = filePath;
-      if (manifest[entry.category]) {
-        manifest[entry.category].push(entry);
-      } else if (entry.category) {
-        // If the category is not a pre-defined key, add it to components as a fallback
+      totalEntries++;
+
+      // 3. MAP Category to Manifest Key
+      // Use the map, default to 'components' if unknown
+      const rawCat = entry.category ? entry.category : 'component';
+      const manifestKey = CATEGORY_MAP[rawCat] || 'components';
+
+      if (manifest[manifestKey]) {
+        manifest[manifestKey].push(entry);
+      } else {
+        // Fallback safety
         manifest.components.push(entry);
       }
     }
   }
 
-  const manifestContent = `
+const manifestContent = `
 // This file is auto-generated by scripts/generate-manifest.js
 // Do not modify this file directly.
 
-import type { WizardManifest } from './src/types/wizard';
+// UPDATED PATH: Point to the file you just created
+import type { WizardManifest } from './src/lib/types/wizard';
 
 export const wizardManifest: WizardManifest = ${JSON.stringify(manifest, null, 2)} as const;
 `;
 
   fs.writeFileSync(path.resolve(__dirname, '../wizardManifest.ts'), manifestContent.trim());
-  console.log('Wizard manifest generated successfully!');
+  console.log(`\n✨ Generated manifest with ${totalEntries} entries!`);
 };
 
-// We need to install doctrine: pnpm install -D doctrine @types/doctrine
-// For the script to run, we first need to handle the dependencies.
 try {
   require('doctrine');
 } catch (e) {

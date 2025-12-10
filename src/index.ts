@@ -4,9 +4,9 @@
 import './index.css';
 
 // 2. Export all types for consumers
-export type * from './types/wizard.d';
+export type * from './lib/types/wizard';
 export type { ThemeName } from './contexts/ThemeContext';
-export type { MultiSelectOption } from './form/MultiSelect';
+export type { MultiSelectOption } from './components/forms/MultiSelect';
 
 // AGgrid types
 export type {
@@ -33,77 +33,78 @@ export * from './data/mockData';
 
 // 3. Export all components, hooks, and utilities
 
-// charts
-export * from './charts/BarChart';
-export * from './charts/ChartWithTable';
-export * from './charts/LineChart';
-export * from './charts/PieChart';
+// ai 
+export * from './blocks/ai/Loader';
+export * from './blocks/ai/Actions';
+export * from './blocks/ai/PromptInput';
+export * from './blocks/ai/Message';
+export * from './blocks/ai/Conversation';
+export * from './blocks/ai/ChatFAB';
 
 // contexts
 export * from './contexts/ThemeContext';
 
 // data-display
-export * from './data-display/DataTable';
-export * from './data-display/Table';
+export * from './components/data-display/ActivityFeed';
+export * from './components/data-display/DataTable';
+export * from './components/data-display/Table';
+export * from './components/data-display/BarChart';
+export * from './components/data-display/ChartWithTable';
+export * from './components/data-display/LineChart';
+export * from './components/data-display/PieChart';
+export * from './components/data-display/CodeBlock';
+export * from './components/data-display/StatCard';
 
 // feedback
-export * from './feedback/Alert';
-export * from './feedback/EmptyState';
-export * from './feedback/TippyTooltip';
-export * from './feedback/Toast';
-export * from './feedback/ToastProvider';
+export * from './components/feedback/Alert';
+export * from './components/feedback/EmptyState';
+export * from './components/feedback/TippyTooltip';
+export * from './components/feedback/Toast';
+export * from './components/feedback/ToastProvider';
 
-// form
-export * from './form/ButtonGroup';
-export * from './form/Checkbox';
-export * from './form/ComboBox';
-export * from './form/DatePicker';
-export * from './form/FileUpload';
-export * from './form/FormTemplate';
-export * from './form/Input';
-export * from './form/MultiSelect';
-export * from './form/Radio';
-export * from './form/SearchInput';
-export * from './form/Select';
-export * from './form/Textarea';
-export * from './form/ToggleSwitch';
+// forms
+export * from './components/forms/ButtonGroup';
+export * from './components/forms/Checkbox';
+export * from './components/forms/ComboBox';
+export * from './components/forms/DatePicker';
+export * from './components/forms/FileUpload';
+export * from './components/forms/FormTemplate';
+export * from './components/forms/Input';
+export * from './components/forms/MultiSelect';
+export * from './components/forms/Radio';
+export * from './components/forms/SearchInput';
+export * from './components/forms/Select';
+export * from './components/forms/Textarea';
+export * from './components/forms/ToggleSwitch';
 
 // hooks
-export * from './hooks/useDataFetch';
+export * from './lib/hooks/useDataFetch';
+
+// iot
+export * from './blocks/iot/DeviceCard';
 
 // layout
-export * from './layout/Accordion';
-export * from './layout/Card';
-export * from './layout/Drawer';
-export * from './layout/List';
-export * from './layout/Modal';
-export * from './layout/Sidebar'; 
+export * from './components/layout/Accordion';
+export * from './components/layout/Card';
+export * from './components/layout/Drawer';
+export * from './components/layout/List';
+export * from './components/layout/Modal';
+export * from './components/layout/Sidebar'; 
+export * from './components/layout/ActionBar';
+export * from './components/layout/PageHeader';
+export * from './components/layout/SectionHeader';
+
 
 // navigation
-export * from './navigation/Breadcrumbs';
-export * from './navigation/Menu';
-export * from './navigation/Pagination';
-export * from './navigation/Stepper';
-export * from './navigation/Tabs';
-
-// templates-patterns
-export * from './templates-patterns/ActionBar';
-export * from './templates-patterns/ActivityFeed';
-export * from './templates-patterns/PageHeader';
-export * from './templates-patterns/SectionHeader';
-export * from './templates-patterns/StatCard';
+export * from './components/navigation/Breadcrumbs';
+export * from './components/navigation/Menu';
+export * from './components/navigation/Pagination';
+export * from './components/navigation/Stepper';
+export * from './components/navigation/Tabs';
 
 // ui
-export * from './ui/Avatar';
-export * from './ui/Badge';
-export * from './ui/Button';
-export * from './ui/ChatFAB';
-export * from './ui/Icon';
-export * from './ui/CodeBlock';
+export * from './components/ui/Avatar';
+export * from './components/ui/Badge';
+export * from './components/ui/Button';
+export * from './components/ui/Icon';
 
-// ai 
-export * from './ai/Loader';
-export * from './ai/Actions';
-export * from './ai/PromptInput';
-export * from './ai/Message';
-export * from './ai/Conversation';

@@ -1,7 +1,7 @@
 /**
  * @wizard
- * @name Mock Data Sets
- * @description Pre-defined datasets for prototyping tables, charts, and other data-driven components.
+ * @name mockChartData
+ * @description Pre-defined datasets for prototyping charts and other data-driven components.
  * @tags data, mock, example
  * @category data
  */
@@ -15,6 +15,14 @@ export const mockChartData = [
   { name: 'May', uv: 1890, pv: 4800 },
   { name: 'Jun', uv: 2390, pv: 3800 },
 ];
+
+/**
+ * @wizard
+ * @name mockTableData
+ * @description Pre-defined datasets for prototyping tables and other data-driven components.
+ * @tags data, mock, example
+ * @category data
+ */
 
 export const mockTableData = [
   { make: 'Tesla', model: 'Model Y', price: 65990, electric: true },

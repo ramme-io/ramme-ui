@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import { useTheme, availableThemes } from './ThemeContext';
-import { Button } from '../ui/Button';
-import { Card } from '../layout/Card';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/layout/Card';
 
 const meta = {
   title: 'Contexts/ThemeContext',
