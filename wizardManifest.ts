@@ -415,6 +415,42 @@ export const wizardManifest: WizardManifest = {
       "filePath": "src/components/data-display/StatCard.tsx"
     },
     {
+      "name": "StatusBadge",
+      "description": "A consistent status indicator featuring a color-coded dot and an optional text label. Essential for IoT devices and system states.",
+      "tags": [
+        "status",
+        "badge",
+        "iot",
+        "indicator",
+        "dot"
+      ],
+      "category": "data-display",
+      "props": [
+        {
+          "name": "status",
+          "type": "'online' | 'offline' | 'error' | 'warning' | 'active'",
+          "description": "The state to represent. Determines the color of the dot."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Custom text to display next to the dot. If omitted, displays the status name (e.g., \"Online\")."
+        },
+        {
+          "name": "showDot",
+          "type": "boolean",
+          "description": "Whether to show the colored indicator dot.",
+          "default": "true"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "Additional CSS classes."
+        }
+      ],
+      "filePath": "src/components/data-display/StatusBadge.tsx"
+    },
+    {
       "name": "Table",
       "description": "A simple, theme-aware HTML table component for displaying tabular data, with support for custom cell rendering and empty states.",
       "tags": [
@@ -1000,6 +1036,47 @@ export const wizardManifest: WizardManifest = {
       "filePath": "src/components/forms/SearchInput.tsx"
     },
     {
+      "name": "SegmentedControl",
+      "description": "A linear toggle component that functions like a radio group. Ideal for switching between discrete modes (e.g., \"Off / Auto / On\").",
+      "tags": [
+        "input",
+        "toggle",
+        "switch",
+        "radio",
+        "control"
+      ],
+      "category": "input",
+      "props": [
+        {
+          "name": "options",
+          "type": "Array<{ label: string, value: string | number }>",
+          "description": "The list of segments to display."
+        },
+        {
+          "name": "value",
+          "type": "string | number",
+          "description": "The currently selected value."
+        },
+        {
+          "name": "onChange",
+          "type": "function",
+          "description": "Callback fired when a segment is selected."
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md'",
+          "description": "The size of the control.",
+          "default": "'md'"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "Additional CSS classes."
+        }
+      ],
+      "filePath": "src/components/forms/SegmentedControl.tsx"
+    },
+    {
       "name": "Select",
       "description": "A standard HTML select dropdown component for choosing a single option from a list.",
       "tags": [
@@ -1170,6 +1247,14 @@ export const wizardManifest: WizardManifest = {
         }
       ],
       "filePath": "src/components/layout/SectionHeader.tsx"
+    },
+    {
+      "name": "Sidebar",
+      "description": "A collapsible, responsive sidebar component.",
+      "tags": [],
+      "category": "",
+      "props": [],
+      "filePath": "src/components/layout/Sidebar.tsx"
     },
     {
       "name": "BreadcrumbItem",

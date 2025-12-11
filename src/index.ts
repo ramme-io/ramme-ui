@@ -54,6 +54,7 @@ export * from './components/data-display/LineChart';
 export * from './components/data-display/PieChart';
 export * from './components/data-display/CodeBlock';
 export * from './components/data-display/StatCard';
+export * from './components/data-display/StatusBadge';
 
 // feedback
 export * from './components/feedback/Alert';
@@ -73,6 +74,7 @@ export * from './components/forms/Input';
 export * from './components/forms/MultiSelect';
 export * from './components/forms/Radio';
 export * from './components/forms/SearchInput';
+export * from './components/forms/SegmentedControl';
 export * from './components/forms/Select';
 export * from './components/forms/Textarea';
 export * from './components/forms/ToggleSwitch';
