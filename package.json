@@ -30,7 +30,8 @@
     "prepare": "npm run build",
     "generate:manifest": "node scripts/generate-manifest.js",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "bundle:ai": "repomix --ignore '**/*.lock,**/dist/**,**/storybook-static/**' --output 'ramme-ui-context.txt'"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
