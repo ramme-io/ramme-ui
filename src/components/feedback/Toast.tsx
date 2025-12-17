@@ -1,13 +1,8 @@
-// src/feedback/Toast.tsx
-
 "use client";
 
 import React, { useEffect } from 'react';
 import { Icon, type IconName } from '../ui/Icon';
-
-const cn = (...classes: (string | undefined | null | false)[]) => {
-  return classes.filter(Boolean).join(' ');
-};
+import { cn } from '../../utils/cn';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -47,6 +42,7 @@ export interface ToastProps {
  * type: (id: string) => void
  * description: Callback function triggered when the toast is dismissed.
  * @category feedback
+ * @id toast
  */
 export const Toast: React.FC<ToastProps> = ({
   id,
@@ -65,30 +61,48 @@ export const Toast: React.FC<ToastProps> = ({
     }
   }, [id, duration, onDismiss]);
 
+  // FIX: Map strictly to Core Theme Variables to ensure consistency with Badge/Button.
   const typeStyles: Record<ToastType, { bg: string; icon: IconName }> = {
-    info: { bg: 'bg-primary text-primary-foreground', icon: 'info' },
-    success: { bg: 'bg-accent text-accent-foreground', icon: 'check-circle' },
-    warning: { bg: 'bg-secondary text-secondary-foreground', icon: 'alert-triangle' },
-    error: { bg: 'bg-destructive text-destructive-foreground', icon: 'x-circle' },
+    info: { 
+      // Maps to Brand Primary (e.g., Blue in Light, Green in Corporate)
+      bg: 'bg-primary text-primary-foreground border-primary/20', 
+      icon: 'info' 
+    },
+    success: { 
+      // Maps to Brand Accent (Matches Badge 'success' variant)
+      bg: 'bg-accent text-accent-foreground border-accent/20', 
+      icon: 'check-circle' 
+    },
+    warning: { 
+      // Maps to Brand Secondary (Matches Badge 'secondary' variant)
+      bg: 'bg-secondary text-secondary-foreground border-secondary/20', 
+      icon: 'alert-triangle' 
+    },
+    error: { 
+      // Maps to Brand Destructive (Matches Badge 'danger' variant)
+      bg: 'bg-destructive text-destructive-foreground border-destructive/20', 
+      icon: 'x-circle' 
+    },
   };
 
   return (
     <div
       className={cn(
-        'flex items-center w-full max-w-sm overflow-hidden rounded-lg shadow-lg pointer-events-auto',
+        'flex items-center w-full max-w-sm overflow-hidden rounded-lg shadow-lg pointer-events-auto border',
         typeStyles[type].bg
       )}
+      role="alert"
     >
-      <div className="p-3">
+      <div className="p-3 shrink-0">
         <Icon name={typeStyles[type].icon} size={24} />
       </div>
-      <div className="flex-grow p-3">
-        {title && <p className="font-bold">{title}</p>}
-        <p className="text-sm">{message}</p>
+      <div className="flex-grow p-3 min-w-0">
+        {title && <p className="font-bold text-sm mb-0.5">{title}</p>}
+        <p className="text-sm opacity-90 break-words">{message}</p>
       </div>
       <button
         onClick={() => onDismiss(id)}
-        className="p-3 self-stretch flex items-center hover:bg-black/20 transition-colors"
+        className="p-3 self-stretch flex items-center justify-center hover:bg-black/10 transition-colors shrink-0"
         aria-label="Dismiss notification"
       >
         <Icon name="x" size={18} />

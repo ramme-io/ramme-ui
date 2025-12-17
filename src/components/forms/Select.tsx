@@ -39,6 +39,7 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
  * type: boolean
  * description: If true, the select dropdown will be unclickable.
  * @category form
+ * @id select
  */
 export const Select: React.FC<SelectProps> = ({ options, label, id, className, ...props }) => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;

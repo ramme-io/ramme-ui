@@ -18,6 +18,7 @@ const cn = (...classes: (string | undefined | null | false)[]) => {
  * type: string
  * description: Optional additional CSS classes for custom styling. Use this for adding padding, shadows, etc. (e.g., 'p-4 shadow-lg').
  * @category layout
+ * @id card
  */
 export const Card: FC<HTMLAttributes<HTMLDivElement>> = ({
   children,

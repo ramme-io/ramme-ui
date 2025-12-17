@@ -21,6 +21,7 @@ export interface DrawerProps {
  * @description A sliding panel that appears from the edge of the screen, used for additional content or forms.
  * @tags layout, modal, slide-in, ui
  * @category layout
+ * @id drawer
  */
 export const Drawer: React.FC<DrawerProps> = ({
   isOpen,

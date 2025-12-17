@@ -41,6 +41,7 @@ interface EmptyStateProps {
  * type: string
  * description: Additional CSS classes for custom styling of the container.
  * @category feedback
+ * @id empty-state
  */
 export const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description, actionButton, className }) => {
   return (

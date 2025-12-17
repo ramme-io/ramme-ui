@@ -37,6 +37,7 @@ interface IconProps extends Omit<LucideProps, 'name'> {
  * type: string
  * description: Optional additional CSS classes for styling the SVG element.
  * @category ui
+ * @id icon
  */
 const IconComponent: React.FC<IconProps> = ({ name, className, ...props }) => {
   // State to hold the dynamically imported icon component

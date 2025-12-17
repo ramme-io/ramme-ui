@@ -37,6 +37,7 @@ export interface DataTableProps extends AgGridReactProps {
  * type: GridOptions
  * description: Additional AG Grid options to configure the grid's behavior.
  * @category data-display
+ * @id data-table
  */
 export const DataTable: React.FC<DataTableProps> = ({
   height = '500px',

@@ -38,6 +38,7 @@ export interface MessageProps {
  * type: (suggestion: string) => void
  * description: Callback for when a suggestion is clicked.
  * @category ai
+ * @id message
  */
 export const Message: React.FC<MessageProps> = ({
   author,

@@ -35,6 +35,10 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
  * type: (id: string) => void
  * description: A function to programmatically dismiss a toast by its ID.
  * @category feedback
+ * @id use-toast
+ * @id toast-provider
+ * @id toast-provider
+ * @id toast-provider
  */
 export const useToast = () => {
   const context = useContext(ToastContext);

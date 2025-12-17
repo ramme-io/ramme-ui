@@ -38,6 +38,7 @@ export interface SegmentedControlProps {
  * - name: className
  * type: string
  * description: Additional CSS classes.
+ * @id segmented-control
  */
 export const SegmentedControl: React.FC<SegmentedControlProps> = ({
   options,

@@ -4,6 +4,10 @@
  * @description Pre-defined datasets for prototyping charts and other data-driven components.
  * @tags data, mock, example
  * @category data
+ * @id mock-chart-data
+ * @id mock-table-data
+ * @id mock-table-data
+ * @id mock-table-data
  */
 // src/data/mockData.ts
 

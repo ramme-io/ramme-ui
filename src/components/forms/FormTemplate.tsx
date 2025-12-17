@@ -113,6 +113,7 @@ export interface FormTemplateProps {
  * - name: children
  * type: React.ReactNode
  * description: Content to render at the bottom of the form, typically used for action buttons like "Save" or "Cancel".
+ * @id form-template
  */
 
 // --- REFACTORED COMPONENT ---

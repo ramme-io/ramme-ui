@@ -34,6 +34,10 @@ interface AccordionItemProps {
  * type: (id: string, isOpen: boolean) => void
  * description: Callback triggered when the item is toggled, providing its `id` and new `isOpen` state.
  * @category layout
+ * @id accordion-item
+ * @id accordion
+ * @id accordion
+ * @id accordion
  */
 
 

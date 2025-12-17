@@ -26,6 +26,7 @@ export interface ChatFABProps {
  * description: The text content for the button's tooltip.
  * default: 'Open AI Assistant'
  * @category ui
+ * @id chat-fab
  */
 export const ChatFAB: React.FC<ChatFABProps> = ({
   onClick,

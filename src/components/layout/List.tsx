@@ -18,6 +18,19 @@ interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
  * type: string
  * description: Optional additional CSS classes for the list item (`<li>`).
  * @category layout
+ * @id list-item
+ * @id list
+ * @id definition-term
+ * @id definition-description
+ * @id definition-list
+ * @id list
+ * @id definition-term
+ * @id definition-description
+ * @id definition-list
+ * @id list
+ * @id definition-term
+ * @id definition-description
+ * @id definition-list
  */
 
 const ListItem: React.FC<ListItemProps> = ({ children, className, ...props }) => {

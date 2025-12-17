@@ -31,6 +31,7 @@ export interface LineChartProps {
  * @description A theme-aware line chart component...
  * @tags charts, data-visualization, rechart
  * @category charts
+ * @id line-chart
  */
 export const LineChart: React.FC<LineChartProps> = ({ 
   data, 

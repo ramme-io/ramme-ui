@@ -55,6 +55,7 @@ interface ButtonGroupChildProps {
  * type: (value: string | number) => void
  * description: Callback function for segmented controls, called when the selected value changes.
  * @category form
+ * @id button-group
  */
 
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ children, className, value, onValueChange }) => {

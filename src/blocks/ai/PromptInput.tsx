@@ -29,6 +29,7 @@ export interface PromptInputProps {
  * description: Placeholder text for the input field.
  * default: "Type your message..."
  * @category ai
+ * @id prompt-input
  */
 export const PromptInput: React.FC<PromptInputProps> = ({ value, onChange, onSubmit, placeholder = "Type your message..." }) => (
   <form onSubmit={onSubmit} className="flex items-center p-2 border-t border-border">

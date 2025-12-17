@@ -35,6 +35,7 @@ interface AvatarProps {
  * type: string
  * description: Optional additional CSS classes for custom styling.
  * @category ui
+ * @id avatar
  */
 export const Avatar: React.FC<AvatarProps> = ({ src, name, size = 'md', className }) => {
   const getInitials = (name: string) => {

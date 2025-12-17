@@ -31,6 +31,7 @@ export interface PageHeaderProps {
  * type: string
  * description: Optional additional CSS classes for custom styling of the page header container.
  * @category templates-patterns
+ * @id page-header
  */
 export const PageHeader: React.FC<PageHeaderProps> = ({ title, description, actions, className }) => {
   return (

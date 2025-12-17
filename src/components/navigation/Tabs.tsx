@@ -28,6 +28,10 @@ export interface TabPanelProps {
  * type: React.ReactNode
  * description: An optional icon to display next to the tab label in the header.
  * @category navigation
+ * @id tab-panel
+ * @id tabs
+ * @id tabs
+ * @id tabs
  */
 export const TabPanel: React.FC<TabPanelProps> = ({ children }) => {
   return <div role="tabpanel" className="p-4 bg-card rounded-b-lg border border-t-0 border-border">{children}</div>;

@@ -24,6 +24,7 @@ interface CodeBlockProps {
  * type: string
  * description: The programming language for syntax highlighting (e.g., 'tsx', 'css', 'javascript').
  * @category ui
+ * @id code-block
  */
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, className }) => {
   const { theme } = useTheme();

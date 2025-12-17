@@ -43,6 +43,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
  * - name: containerClassName
  * type: string
  * description: Optional additional CSS classes for the container.
+ * @id input
  */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({

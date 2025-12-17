@@ -19,6 +19,7 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
  * type: string
  * description: Optional additional CSS classes for the container div.
  * @category form
+ * @id textarea
  */
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, className, containerClassName, ...props }, ref) => {

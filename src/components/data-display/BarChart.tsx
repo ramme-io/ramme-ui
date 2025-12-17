@@ -31,6 +31,7 @@ export interface BarChartProps {
  * type: string
  * description: An optional title to display above the chart.
  * @category charts
+ * @id bar-chart
  */
 
 

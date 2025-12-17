@@ -37,6 +37,7 @@ export interface TableProps {
  * type: string
  * description: Optional additional CSS classes for custom styling of the table container.
  * @category data-display
+ * @id table
  */
 export const Table: React.FC<TableProps> = ({ headers, data, caption, className }) => {
   return (

@@ -20,6 +20,7 @@ interface ModalProps {
  * @description A dialog box that appears on top of the current page, requiring user interaction to dismiss.
  * @tags ui, overlay, dialog, popup
  * @category layout
+ * @id modal
  */
 export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title, footer, className }) => {
   const modalRef = useRef<HTMLDivElement>(null);

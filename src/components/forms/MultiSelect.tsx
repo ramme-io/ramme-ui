@@ -26,6 +26,7 @@ export interface MultiSelectProps {
  * @description An enhanced dropdown that allows users to select multiple options from a searchable list.
  * @tags form, input, select, dropdown
  * @category form
+ * @id multi-select
  */
 export const MultiSelect: React.FC<MultiSelectProps> = ({
   options,

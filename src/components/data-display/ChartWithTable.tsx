@@ -38,6 +38,7 @@ export interface ChartWithTableProps {
  * type: TableHeader[]
  * description: The column definitions for the table view.
  * @category templates-patterns
+ * @id chart-with-table
  */
 export const ChartWithTable: React.FC<ChartWithTableProps> = ({ title, children, data, tableHeaders }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

@@ -45,6 +45,7 @@ export interface StatCardProps {
  * type: string
  * description: Optional additional CSS classes for custom styling.
  * @category templates-patterns
+ * @id stat-card
  */
 
 export const StatCard: React.FC<StatCardProps> = ({

@@ -39,6 +39,7 @@ export interface PaginationProps {
  * type: string
  * description: Optional additional CSS classes for the container.
  * @category navigation
+ * @id pagination
  */
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,

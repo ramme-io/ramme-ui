@@ -42,6 +42,7 @@ export interface StatusBadgeProps {
  * - name: className
  * type: string
  * description: Additional CSS classes.
+ * @id status-badge
  */
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,

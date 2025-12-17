@@ -46,6 +46,7 @@ export interface BadgeProps
  * type: React.ReactNode
  * description: The content to display inside the badge.
  * @category ui
+ * @id badge
  */
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (

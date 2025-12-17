@@ -32,6 +32,7 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
  * type: string
  * description: Optional additional CSS classes for the input element.
  * @category form
+ * @id checkbox
  */
 export const Checkbox: React.FC<CheckboxProps> = ({ label, id, className, ...props }) => {
   // Generate a unique ID only once on the client-side render

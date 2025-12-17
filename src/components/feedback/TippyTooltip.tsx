@@ -27,6 +27,7 @@ import { useTheme } from '../../contexts/ThemeContext'; // Import the useTheme h
  * type: string
  * description: Optional additional CSS classes for custom styling of the tooltip content.
  * @category feedback
+ * @id tippy-tooltip
  */
 export const TippyTooltip: React.FC<TippyProps> = ({ children, content, ...props }) => {
   const { theme } = useTheme(); // Use the theme context

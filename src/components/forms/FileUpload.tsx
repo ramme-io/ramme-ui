@@ -34,6 +34,7 @@ interface FileUploadProps {
  * type: string
  * description: Optional additional CSS classes for custom styling of the file upload container.
  * @category form
+ * @id file-upload
  */
 
 export const FileUpload: React.FC<FileUploadProps> = ({

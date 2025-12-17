@@ -7,6 +7,7 @@ import React from 'react';
  * @description A visual indicator used within an AI Message to show that a response is being generated.
  * @tags ui, ai, feedback, loading
  * @category ai
+ * @id loader
  */
 export const Loader: React.FC = () => (
   <div className="flex items-center gap-2">

@@ -21,6 +21,7 @@ export interface SectionHeaderProps {
  * type: string
  * description: Optional additional CSS classes for custom styling of the header container.
  * @category templates-patterns
+ * @id section-header
  */
 export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, className }) => {
   return (

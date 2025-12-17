@@ -62,6 +62,7 @@ export const SidebarProvider = ({ children }: { children: ReactNode }) => {
  * @description A collapsible, responsive sidebar component.
  * @props
  * @prop {React.ReactNode} children - The content of the sidebar.
+ * @id sidebar
  */
 export const Sidebar = React.forwardRef<
   HTMLDivElement,

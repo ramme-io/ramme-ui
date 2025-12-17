@@ -8,6 +8,7 @@ import type { InputProps } from './Input';
  * @description A specialized input for search functionality, using the base Input component with a search icon.
  * @tags form, input, search, ui
  * @category form
+ * @id search-input
  */
 export const SearchInput: React.FC<InputProps> = (props) => {
   return (

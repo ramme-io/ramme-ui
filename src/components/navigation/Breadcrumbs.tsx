@@ -31,6 +31,10 @@ interface BreadcrumbItemProps {
  * type: string
  * description: Additional CSS classes for custom styling of the individual item.
  * @category navigation
+ * @id breadcrumb-item
+ * @id breadcrumbs
+ * @id breadcrumbs
+ * @id breadcrumbs
  */
 const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ label, to, isCurrent, className, icon }) => {
   const baseStyles = 'inline-flex items-center text-sm font-medium';

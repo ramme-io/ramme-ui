@@ -76,6 +76,7 @@ export interface ActivityFeedProps {
  * type: string
  * description: An optional URL for a "View changelog" link.
  * @category templates-patterns
+ * @id activity-feed
  */
 export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   items,

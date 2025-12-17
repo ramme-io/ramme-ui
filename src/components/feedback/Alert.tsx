@@ -49,6 +49,7 @@ const variantConfig = {
  * type: string
  * description: Optional additional CSS classes for custom styling of the alert container.
  * @category feedback
+ * @id alert
  */
 export const Alert: React.FC<AlertProps> = ({
   title,

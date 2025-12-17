@@ -24,6 +24,7 @@ interface ComboBoxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
  * @description A text input with an integrated dropdown list of selectable options, allowing both typing and selection.
  * @tags form, input, select, dropdown, autocomplete, ui
  * @category form
+ * @id combo-box
  */
 export const ComboBox: React.FC<ComboBoxProps> = ({
   options,

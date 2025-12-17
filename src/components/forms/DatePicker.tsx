@@ -59,6 +59,7 @@ export interface DatePickerProps {
  * type: Date
  * description: The latest selectable date.
  * @category form
+ * @id date-picker
  */
 export const DatePicker: React.FC<DatePickerProps> = ({
   label,

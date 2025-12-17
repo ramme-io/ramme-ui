@@ -11,6 +11,10 @@ import React from 'react';
  * type: () => void
  * description: Function to call when the suggestion is clicked.
  * @category ai
+ * @id suggestion
+ * @id actions
+ * @id actions
+ * @id actions
  */
 export const Suggestion: React.FC<{ children: React.ReactNode; onClick: () => void }> = ({ children, onClick }) => (
     <button onClick={onClick} className="px-3 py-1.5 bg-card-alt hover:bg-bg-hover border border-border rounded-full text-sm text-text-light transition-colors">

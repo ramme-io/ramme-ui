@@ -7,6 +7,7 @@ import React, { useEffect, useRef } from 'react';
  * @description A container component that holds a series of Message components and manages the layout and scrolling of the chat history.
  * @tags ui, ai, layout, chat
  * @category ai
+ * @id conversation
  */
 export const Conversation: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const conversationEndRef = useRef<HTMLDivElement>(null);

@@ -21,6 +21,7 @@ export interface ActionBarProps {
  * type: string
  * description: Optional additional CSS classes for custom styling of the action bar container.
  * @category layout
+ * @id action-bar
  */
 export const ActionBar: React.FC<ActionBarProps> = ({ children, className }) => {
   return (

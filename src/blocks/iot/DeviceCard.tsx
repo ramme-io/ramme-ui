@@ -46,6 +46,7 @@ export type DeviceStatus = keyof typeof statusColorMap;
  * - name: className
  * type: string
  * description: Optional additional CSS classes.
+ * @id device-card
  */
 export interface DeviceCardProps {
   title: string;

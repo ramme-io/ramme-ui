@@ -36,6 +36,7 @@ export interface StepperProps {
  * type: string
  * description: Optional additional CSS classes for the stepper container.
  * @category navigation
+ * @id stepper
  */
 
 export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, className }) => {

@@ -33,6 +33,13 @@ import { cn } from '../../utils/cn';
  * @wizard
  * @name MenuDivider
  * @description A visual separator for grouping MenuItems within a Menu.
+ * @id menu-divider
+ * @id menu-item
+ * @id menu
+ * @id menu-item
+ * @id menu
+ * @id menu-item
+ * @id menu
  */
 const MenuDivider: React.FC = () => (
   <div className="my-1 h-px bg-border" role="separator" />

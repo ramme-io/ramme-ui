@@ -35,6 +35,7 @@ export interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> 
  * type: string
  * description: Optional additional CSS classes for the input element.
  * @category form
+ * @id radio
  */
 
 export const Radio: React.FC<RadioProps> = ({ label, id, className, ...props }) => {

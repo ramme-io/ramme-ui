@@ -54,6 +54,7 @@ import { Slot } from '@radix-ui/react-slot';
  * - name: onClick
  * type: () => void
  * description: Callback fired when the button is clicked.
+ * @id button
  */
 
 const buttonVariants = cva(

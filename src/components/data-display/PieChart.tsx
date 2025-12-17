@@ -17,6 +17,7 @@ export interface PieChartProps {
  * @description A theme-aware pie chart component powered by Recharts, for showing proportional relationships of parts to a whole.
  * @tags charts, data-visualization, rechart
  * @category charts
+ * @id pie-chart
  */
 
 export const PieChart: React.FC<PieChartProps> = ({ data, dataKey, nameKey }) => {

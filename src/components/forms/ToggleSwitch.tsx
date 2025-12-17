@@ -39,6 +39,7 @@ export interface ToggleSwitchProps {
  * description: If true, the toggle will be unclickable and styled as disabled.
  * default: false
  * @category form
+ * @id toggle-switch
  */
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   checked,
