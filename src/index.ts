@@ -7,6 +7,7 @@ import './index.css';
 export type * from './lib/types/wizard';
 export type { ThemeName } from './contexts/ThemeContext';
 export type { MultiSelectOption } from './components/forms/MultiSelect';
+export { AUTO_REGISTRY } from './component-registry';
 
 // AGgrid types
 export type {
