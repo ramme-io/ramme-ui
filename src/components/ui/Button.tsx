@@ -2,27 +2,10 @@
  * @file Button.tsx
  * @repository ramme-ui
  * @description The primary Button component for the Ramme design system.
- *
- * @developer_notes
- * STRATEGIC UPGRADE (10/20/2025):
- * This component has been upgraded to support polymorphism using the `asChild`
- * pattern, facilitated by the `@radix-ui/react-slot` package.
- *
- * 1. Why?: A hardcoded `<button>` element is inflexible. It prevents consumers
- * from rendering the component as a React Router `<Link>` or a standard `<a>` tag,
- * which is critical for navigation.
- *
- * 2. The Fix: The component now accepts an `asChild` prop.
- * - If `asChild` is `false` (default), it renders a `<button>` as before.
- * - If `asChild` is `true`, it renders a `<Slot>` component, which
- * "melts" its props onto the React component passed as its child.
- *
- * 3. Consistency: This pattern now matches our `MenuItem` component,
- * creating a consistent and predictable API across the entire `ramme-ui` library.
  */
 
 import React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority'; // <--- Removed unused 'type VariantProps'
 import { Icon, type IconName } from './Icon';
 import { cn } from '../../utils/cn';
 import { Slot } from '@radix-ui/react-slot';
@@ -33,7 +16,7 @@ import { Slot } from '@radix-ui/react-slot';
  * @category Input
  * @props 
  * - name: variant
- * type: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'
+ * type: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link' | 'accent'
  * description: The visual style of the button.
  * default: 'primary'
  * - name: size
@@ -87,9 +70,10 @@ const buttonVariants = cva(
   },
 );
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+// Explicitly defining the interface prevents type loss during the build
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link' | 'accent' | null;
+  size?: 'sm' | 'md' | 'lg' | 'icon' | null;
   asChild?: boolean;
   loading?: boolean;
   iconLeft?: IconName;
@@ -120,10 +104,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={loading || props.disabled}
         {...props}
       >
-        {/* --- THIS IS THE FIX ---
-          If asChild is true, we must pass *only* the children.
-          If asChild is false, we render the icons and children as before.
-        */}
         {asChild ? (
           children
         ) : (

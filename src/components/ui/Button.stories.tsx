@@ -32,6 +32,7 @@ const meta = {
     loading: {
       control: 'boolean',
     },
+    // We use 'select' here if possible, but 'text' is fine for generic input
     iconLeft: { control: 'text' },
     iconRight: { control: 'text' },
     asChild: {
@@ -75,24 +76,29 @@ export const Loading: Story = {
   },
 };
 
-// --- THIS IS THE FIX ---
-// We now pass the <Icon> component as `children`
-// and remove the `iconLeft` prop.
+// ✅ UPDATE 1: Use 'render' for complex children to keep args serializable
 export const IconOnly: Story = {
   args: {
     variant: 'ghost',
     size: 'icon',
-    children: <Icon name="settings" />, // <-- Pass icon as children
-    // iconLeft: 'settings', // <-- Remove this
+    // We don't pass children in args here
   },
+  render: (args) => (
+    <Button {...args}>
+      <Icon name="settings" />
+    </Button>
+  ),
 };
 
+// ✅ UPDATE 2: Use 'render' for polymorphic components
 export const PolymorphicLink: Story = {
   name: 'Polymorphic (as Link)',
   args: {
     variant: 'outline',
     asChild: true,
-    children: (
+  },
+  render: (args) => (
+    <Button {...args}>
       <a
         href="https://google.com"
         target="_blank"
@@ -102,6 +108,6 @@ export const PolymorphicLink: Story = {
         <Icon name="external-link" className="mr-2" />
         Open Google
       </a>
-    ),
-  },
+    </Button>
+  ),
 };

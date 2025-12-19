@@ -8,6 +8,7 @@ export type * from './lib/types/wizard';
 export type { ThemeName } from './contexts/ThemeContext';
 export type { MultiSelectOption } from './components/forms/MultiSelect';
 export { AUTO_REGISTRY } from './component-registry';
+export { wizardManifest } from '../wizardManifest';
 
 // AGgrid types
 export type {

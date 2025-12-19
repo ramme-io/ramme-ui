@@ -13,14 +13,20 @@ export interface WizardEntryProp {
 
 // Define the shape of a wizard entry for components/layouts/utils/data
 export interface WizardEntry {
+  id: string;
   name: string;
+  version: string; // <--- Added this property
   description: string;
   tags: string[];
   category: string;
   filePath: string;
+  importPath?: string;
+  
   // UPDATED: Use the new WizardEntryProp type here.
   props?: WizardEntryProp[]; 
-  availableData?: string[]; // Specific for mock data
+  availableData?: string[];
+  
+  // Specific for mock data
   returns?: {
     name: string;
     type: string;
@@ -35,4 +41,5 @@ export interface WizardManifest {
   utils: WizardEntry[];
   hooks: WizardEntry[];
   data: WizardEntry[];
+  devices?: WizardEntry[]; 
 }

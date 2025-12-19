@@ -1681,14 +1681,14 @@ export const wizardManifest: WizardManifest = {
     {
       "id": "button",
       "name": "Button",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "The primary interactive element. Supports polymorphism (rendering as a link) via the 'asChild' prop.",
       "tags": [],
       "category": "input",
       "props": [
         {
           "name": "variant",
-          "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'",
+          "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link' | 'accent'",
           "description": "The visual style of the button.",
           "default": "'primary'"
         },
