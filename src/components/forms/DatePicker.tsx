@@ -1,63 +1,57 @@
-// src/form/DatePicker.tsx
 import React from 'react';
 import ReactDatePicker from 'react-datepicker';
-import { useTheme } from '../../contexts/ThemeContext'; // Assuming path to ThemeContext
-import { Input } from './Input'; // Assuming named export for Input
-
-// Import the necessary CSS for the datepicker
+import { cn } from '../../utils/cn';
+import { Icon } from '../ui/Icon';
 import 'react-datepicker/dist/react-datepicker.css';
 
-// Explicitly define the props we want to expose from the library.
-// This simplifies usage and avoids complex type extensions.
+// We inject a global style override to force the library to respect our tokens
+const GLOBAL_STYLE_OVERRIDE = `
+  .react-datepicker {
+    font-family: inherit !important;
+    background-color: rgb(var(--app-card-bg-color)) !important;
+    border: 1px solid rgb(var(--app-border-color)) !important;
+    border-radius: var(--app-border-radius-md) !important;
+    color: rgb(var(--app-text-color)) !important;
+  }
+  .react-datepicker__header {
+    background-color: rgb(var(--app-bg-color)) !important;
+    border-bottom: 1px solid rgb(var(--app-border-color)) !important;
+  }
+  .react-datepicker__current-month, .react-datepicker__day-name, .react-datepicker__day {
+    color: rgb(var(--app-text-color)) !important;
+  }
+  .react-datepicker__day:hover {
+    background-color: rgb(var(--app-primary-color) / 0.1) !important;
+  }
+  .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+    background-color: rgb(var(--app-primary-color)) !important;
+    color: rgb(var(--app-primary-foreground-color)) !important;
+  }
+  .react-datepicker__navigation-icon::before {
+    border-color: rgb(var(--app-text-color)) !important;
+  }
+`;
+
 export interface DatePickerProps {
   label?: string;
-  onChange: (date: Date | null) => void;
   selected: Date | null;
+  onChange: (date: Date | null) => void;
   className?: string;
   placeholderText?: string;
   dateFormat?: string;
-  isClearable?: boolean;
   minDate?: Date;
   maxDate?: Date;
+  error?: boolean;
+  helperText?: string;
   showTimeSelect?: boolean;
+  isClearable?: boolean;
 }
 
 /**
  * @wizard
  * @name DatePicker
- * @description A calendar-based input component for selecting single dates, with theme integration.
+ * @description A theme-aware calendar input for selecting dates. Wraps react-datepicker to ensure consistent styling and "Zero Jank" layout stability.
  * @tags form, input, date, calendar, ui
- * @props
- * - name: label
- * type: string
- * description: An optional label displayed above the date picker input field.
- * - name: selected
- * type: Date | null
- * description: The currently selected date object, or `null` if no date is selected.
- * - name: onChange
- * type: (date: Date | null) => void
- * description: Callback function triggered when a new date is selected.
- * - name: className
- * type: string
- * description: Optional additional CSS classes for the date picker's wrapper container.
- * - name: dateFormat
- * type: string
- * description: The format string for displaying the date (e.g., 'MM/dd/yyyy', 'yyyy-MM-dd').
- * - name: showTimeSelect
- * type: boolean
- * description: If true, also allows time selection in addition to date selection.
- * - name: isClearable
- * type: boolean
- * description: If true, displays a clear button to deselect the date.
- * - name: placeholderText
- * type: string
- * description: Text displayed when no date is selected.
- * - name: minDate
- * type: Date
- * description: The earliest selectable date.
- * - name: maxDate
- * type: Date
- * description: The latest selectable date.
  * @category form
  * @id date-picker
  */
@@ -66,29 +60,42 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   selected,
   onChange,
   className,
+  error,
+  helperText,
   ...props
 }) => {
-  const { theme } = useTheme();
-  // Dynamically create a class name for the portal to apply theme styles
-  const portalClassName = `react-datepicker-portal-${theme}`;
-
   return (
-    <div className={className}>
+    <div className={cn("w-full flex flex-col", className)}>
+      <style>{GLOBAL_STYLE_OVERRIDE}</style>
+      
       {label && (
-        <label className="block text-sm font-medium text-text mb-1">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}
-      <ReactDatePicker
-        selected={selected}
-        // The simplified inline handler directly matches the library's expectation.
-        onChange={(date: Date | null) => onChange(date)}
-        customInput={<Input />}
-        popperClassName={portalClassName}
-        // Apply theme variables to the calendar itself
-        calendarClassName={`bg-card text-text border border-border rounded-md shadow-lg`}
-        {...props}
-      />
+      
+      <div className="relative">
+        <ReactDatePicker
+          selected={selected}
+          onChange={onChange}
+          className={cn(
+            "flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            error ? "border-destructive" : "border-input"
+          )}
+          wrapperClassName="w-full" // Forces the input to take full width
+          showPopperArrow={false}
+          {...props}
+        />
+        <div className="absolute right-3 top-2.5 pointer-events-none text-muted-foreground">
+          <Icon name="calendar" className="h-4 w-4" />
+        </div>
+      </div>
+
+      {helperText && (
+        <p className={cn("mt-1.5 text-xs", error ? "text-destructive" : "text-muted-foreground")}>
+          {helperText}
+        </p>
+      )}
     </div>
   );
 };

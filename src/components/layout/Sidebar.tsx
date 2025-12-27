@@ -1,286 +1,188 @@
-// packages/ui/src/layout/Sidebar.tsx
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-} from 'react';
-// We are removing 'cva' as it's not needed for this logic
-import { Button } from '../ui/Button';
-import { Icon } from '../ui/Icon';
-import { TippyTooltip } from '../feedback/TippyTooltip';
+import React, { createContext, useState, useEffect } from 'react';
 import { cn } from '../../utils/cn';
+import { Icon, IconName } from '../ui/Icon';
+import { Avatar } from '../ui/Avatar';
 
-// --- Context for Sidebar State ---
-interface SidebarContextProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  toggle: () => void;
+// --- Types ---
+export interface SidebarItem {
+  id: string;
+  label: string;
+  icon: IconName;
+  href?: string;
+  onClick?: () => void;
+  subItems?: Omit<SidebarItem, 'icon'>[]; 
+  badge?: string | number;
 }
 
-const SidebarContext = createContext<SidebarContextProps | null>(null);
+export interface SidebarUser {
+  name: string;
+  email: string;
+  avatarUrl?: string;
+}
 
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error('useSidebar must be used within a SidebarProvider');
-  }
-  return context;
-};
+export interface SidebarProps {
+  items: SidebarItem[];
+  user?: SidebarUser;
+  className?: string;
+  logo?: React.ReactNode;
+  activeItemId?: string;
+  onNavigate?: (item: SidebarItem) => void;
+  footerSlot?: React.ReactNode;
+}
 
-export const SidebarProvider = ({ children }: { children: ReactNode }) => {
-  // --- ✅ 1. THE FIX ---
-  // Default to 'false' (closed) for a mobile-first experience.
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
+interface SidebarContextType {
+  collapsed: boolean;
+  toggleCollapsed: () => void;
+  activeItemId?: string;
+}
 
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'b' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        toggle();
-      }
-    };
+const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [toggle]);
+// --- Sub-components ---
 
+const SidebarHeader = ({ logo, collapsed }: { logo?: React.ReactNode; collapsed: boolean }) => (
+  <div className={cn("flex h-16 items-center border-b px-4", collapsed ? "justify-center" : "justify-between")}>
+    {!collapsed && (logo || <span className="text-lg font-bold">App</span>)}
+  </div>
+);
+
+const SidebarNavItem = ({ 
+  item, 
+  collapsed, 
+  isActive, 
+  onClick 
+}: { 
+  item: SidebarItem; 
+  collapsed: boolean; 
+  isActive: boolean; 
+  onClick: () => void;
+}) => {
   return (
-    <SidebarContext.Provider value={{ isOpen, setIsOpen, toggle }}>
-      {children}
-    </SidebarContext.Provider>
+    <button
+      onClick={onClick}
+      className={cn(
+        "group flex w-full items-center gap-x-3 rounded-md p-2 text-sm font-medium transition-colors",
+        isActive 
+          ? "bg-primary/10 text-primary" 
+          : "text-muted-foreground hover:bg-accent hover:text-foreground",
+        collapsed && "justify-center"
+      )}
+      title={collapsed ? item.label : undefined}
+    >
+      <Icon name={item.icon} className="h-5 w-5 shrink-0" />
+      {!collapsed && (
+        <>
+          <span className="flex-1 text-left">{item.label}</span>
+          {item.badge && (
+            <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+              {item.badge}
+            </span>
+          )}
+        </>
+      )}
+    </button>
   );
 };
 
-// --- Main Sidebar Component ---
-// We no longer use cva or VariantProps here
+const SidebarFooter = ({ user, collapsed, slot }: { user?: SidebarUser; collapsed: boolean; slot?: React.ReactNode }) => (
+  <div className="mt-auto border-t p-4">
+    {slot}
+    {user && (
+      <div className={cn("flex items-center gap-x-3 mt-4", collapsed && "justify-center")}>
+        <Avatar name={user.name} src={user.avatarUrl} size="sm" />
+        {!collapsed && (
+          <div className="flex flex-col overflow-hidden">
+            <span className="truncate text-sm font-medium">{user.name}</span>
+            <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+);
+
+// --- Main Component ---
+
 /**
  * @wizard
  * @name Sidebar
- * @description A collapsible, responsive sidebar component.
+ * @description A collapsible sidebar navigation component with support for branding, navigation items, and user profile.
+ * @tags layout, navigation, sidebar
  * @props
- * @prop {React.ReactNode} children - The content of the sidebar.
+ * - name: items
+ * type: SidebarItem[]
+ * description: Array of navigation items.
+ * - name: user
+ * type: SidebarUser
+ * description: User profile information for the footer.
+ * - name: activeItemId
+ * type: string
+ * description: ID of the currently active navigation item.
+ * @category layout
  * @id sidebar
  */
-export const Sidebar = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const { isOpen } = useSidebar();
-  
-  return (
-    <aside
-      ref={ref}
-      // --- ✅ 2. THE MAIN FIX ---
-      // This is the new responsive logic that replaces 'sidebarVariants'
-      className={cn(
-        // Base styles
-        'h-screen flex flex-col border-r border-border bg-card text-foreground transition-all duration-300 ease-in-out',
-        
-        // Mobile (Default): Fixed, off-screen
-        'fixed inset-y-0 left-0 z-50 w-72', // 'w-72' is the width when open
-        isOpen ? 'translate-x-0' : '-translate-x-full',
+export const Sidebar: React.FC<SidebarProps> = ({
+  items,
+  user,
+  className,
+  logo,
+  activeItemId,
+  onNavigate,
+  footerSlot,
+}) => {
+  const [collapsed, setCollapsed] = useState(false);
 
-        // Desktop (Breakpoint: md:)
-        'md:sticky md:translate-x-0', // Becomes sticky and visible on desktop
-        isOpen ? 'md:w-64' : 'md:w-16', // The desktop-only collapse
-        
-        className,
-      )}
-      {...props}
-    />
-  );
-});
-Sidebar.displayName = 'Sidebar';
+  const toggleCollapsed = () => setCollapsed((prev) => !prev);
 
-// --- (All Sub-Components: Header, Content, Footer, Menu, MenuItem) ---
-// No changes are needed for any of the other components.
-// Your 'SidebarMenuItem' and 'SidebarTrigger' are already perfect.
-
-export const SidebarHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'p-4 border-b border-border h-16 flex items-center shrink-0',
-      className,
-    )}
-    {...props}
-  />
-));
-SidebarHeader.displayName = 'SidebarHeader';
-
-export const SidebarContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex-1 overflow-y-auto p-4 space-y-2', className)}
-    {...props}
-  />
-));
-SidebarContent.displayName = 'SidebarContent';
-
-export const SidebarGroup = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('mb-4', className)} {...props} />
-));
-SidebarGroup.displayName = 'SidebarGroup';
-
-export const SidebarFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('p-4 border-t border-border mt-auto shrink-0', className)}
-    {...props}
-  />
-));
-SidebarFooter.displayName = 'SidebarFooter';
-
-// --- Navigation Sub-Components ---
-export const SidebarMenu = React.forwardRef<
-  HTMLElement,
-  React.HTMLAttributes<HTMLElement>
->(({ className, ...props }, ref) => (
-  <nav ref={ref} className={cn('space-y-0', className)} {...props} />
-));
-SidebarMenu.displayName = 'SidebarMenu';
-
-interface SidebarMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  icon?: React.ReactNode;
-  badge?: React.ReactNode;
-  tooltip?: string;
-  href?: string;
-  isActive?: boolean;
-  as?: React.ElementType;
-  end?: boolean;
-}
-
-export const SidebarMenuItem = React.forwardRef<
-  HTMLDivElement,
-  SidebarMenuItemProps
->(
-  (
-    {
-      className,
-      children,
-      icon,
-      badge,
-      tooltip,
-      href = '#',
-      isActive,
-      as: Component = 'a',
-      end, 
-      ...props
-    },
-    ref,
-  ) => {
-    const { isOpen } = useSidebar();
-
-    const componentProps: any = {
-      to: href,
-      href: href,
-      end: end,
+  // Auto-collapse on small screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setCollapsed(true);
+      }
     };
-
-    const baseStyles =
-      'group flex flex-nowrap items-center h-8 px-2 rounded-md transition-colors duration-200 cursor-pointer';
-    const defaultStateStyles = 'text-muted-foreground hover:bg-primary/10';
-    const activeStateStyles = 'bg-primary/20 text-primary';
-
-    const collapsedStyles = !isOpen && 'w-10 justify-center px-0';
-
-    if (typeof Component === 'string') {
-      const isActuallyActive = isActive;
-      componentProps.className = cn(
-        baseStyles,
-        isActuallyActive ? activeStateStyles : defaultStateStyles,
-        collapsedStyles,
-        className,
-      );
-    } else {
-      componentProps.className = ({
-        isActive: isNavLinkActive,
-      }: { isActive?: boolean } = {}) => {
-        const isActuallyActive = isActive || isNavLinkActive;
-        return cn(
-          baseStyles,
-          isActuallyActive ? activeStateStyles : defaultStateStyles,
-          collapsedStyles,
-          className,
-        );
-      };
-    }
-
-    const content = (
-      <Component {...componentProps}>
-        {icon && (
-          <div
-            className={cn(
-              'transition-all flex-shrink-0 [&_svg]:w-4 [&_svg]:h-4',
-              isOpen && 'mr-2',
-            )}
-          >
-            {icon}
-          </div>
-        )}
-        <span
-          className={cn(
-            'text-sm flex-1 whitespace-nowrap overflow-hidden text-ellipsis transition-opacity duration-200',
-            !isOpen && 'opacity-0 w-0',
-          )}
-        >
-          {children}
-        </span>
-        {badge && (
-          <div
-            className={cn(
-              'ml-auto flex-shrink-0 transition-opacity duration-200',
-              !isOpen && 'opacity-0',
-            )}
-          >
-            {badge}
-          </div>
-        )}
-      </Component>
-    );
-
-    return (
-      <div ref={ref} {...props}>
-        {isOpen || !tooltip ? (
-          content
-        ) : (
-          <TippyTooltip content={tooltip} placement="right">
-            {content}
-          </TippyTooltip>
-        )}
-      </div>
-    );
-  },
-);
-SidebarMenuItem.displayName = 'SidebarMenuItem';
-
-// --- Control Component ---
-export const SidebarTrigger = () => {
-  const { toggle, isOpen } = useSidebar();
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Check on mount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggle}
-      className="fixed top-3 left-3 z-50 md:hidden"
-    >
-      <Icon name={isOpen ? 'panel-left-close' : 'panel-left-open'} />
-    </Button>
+    <SidebarContext.Provider value={{ collapsed, toggleCollapsed, activeItemId }}>
+      <div
+        className={cn(
+          "flex h-screen flex-col border-r bg-card transition-all duration-300",
+          collapsed ? "w-16" : "w-64",
+          className
+        )}
+      >
+        <SidebarHeader logo={logo} collapsed={collapsed} />
+        
+        <div className="flex-1 overflow-y-auto px-3 py-4">
+          <nav className="space-y-1">
+            {items.map((item) => (
+              <SidebarNavItem 
+                key={item.id}
+                item={item}
+                collapsed={collapsed}
+                isActive={activeItemId === item.id}
+                onClick={() => {
+                  item.onClick?.();
+                  onNavigate?.(item);
+                }}
+              />
+            ))}
+          </nav>
+        </div>
+
+        <button 
+          onClick={toggleCollapsed}
+          className="absolute -right-3 top-20 z-50 rounded-full border bg-background p-1 text-muted-foreground shadow-sm hover:text-foreground"
+        >
+          <Icon name={collapsed ? 'chevron-right' : 'chevron-left'} className="h-4 w-4" />
+        </button>
+
+        <SidebarFooter user={user} collapsed={collapsed} slot={footerSlot} />
+      </div>
+    </SidebarContext.Provider>
   );
 };

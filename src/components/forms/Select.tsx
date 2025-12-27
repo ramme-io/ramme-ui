@@ -1,72 +1,140 @@
-// src/components/ui/Select.tsx
-import React from 'react';
+'use client';
+
+import React, { useId } from 'react';
+import ReactSelect, { components, DropdownIndicatorProps } from 'react-select';
+import { cn } from '../../utils/cn';
+import { Icon } from '../ui/Icon';
 
 export interface SelectOption {
   value: string | number;
   label: string;
 }
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps {
   options: SelectOption[];
+  value?: SelectOption | null;
+  onChange: (option: SelectOption | null) => void;
   label?: string;
+  placeholder?: string;
+  isDisabled?: boolean;
+  isLoading?: boolean;
+  isClearable?: boolean;
+  isSearchable?: boolean;
+  className?: string;
+  error?: boolean;
+  helperText?: string;
 }
 
-/**
- * @wizard
- * @name Select
- * @description A standard HTML select dropdown component for choosing a single option from a list.
- * @tags form, input, dropdown, ui
- * @props
- * - name: options
- * type: { value: string | number; label: string; }[]
- * description: An array of objects defining the selectable options, each with a `value` and `label`.
- * - name: label
- * type: string
- * description: An optional label displayed above the select dropdown.
- * - name: id
- * type: string
- * description: A unique HTML `id` for the select element. Automatically generated if not provided.
- * - name: className
- * type: string
- * description: Optional additional CSS classes for the select element.
- * - name: value
- * type: string | number | readonly string[]
- * description: The currently selected option's value.
- * - name: onChange
- * type: (event: React.ChangeEvent<HTMLSelectElement>) => void
- * description: Callback function triggered when the selected value changes.
- * - name: disabled
- * type: boolean
- * description: If true, the select dropdown will be unclickable.
- * @category form
- * @id select
- */
-export const Select: React.FC<SelectProps> = ({ options, label, id, className, ...props }) => {
-  const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
-  const baseStyles = 'block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary appearance-none';
-  const themeStyles = 'bg-card border-border text-text';
-  const arrowStyles = `bg-[url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.5em_1.5em]`;
+const DropdownIndicator = (props: DropdownIndicatorProps<SelectOption, false>) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <Icon name="chevron-down" className="h-4 w-4 text-muted-foreground" />
+    </components.DropdownIndicator>
+  );
+};
+
+export const Select: React.FC<SelectProps> = ({
+  options,
+  value,
+  onChange,
+  label,
+  placeholder = "Select...",
+  isDisabled = false,
+  isLoading = false,
+  isClearable = true,
+  isSearchable = true,
+  className,
+  error,
+  helperText
+}) => {
+  const uniqueId = useId();
+
+  // --- THEME ENGINE MAPPING ---
+  // We use CSS variables to ensure the Select matches the active theme dynamically.
+  const customStyles = {
+    control: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: 'rgb(var(--app-card-bg-color))',
+      borderColor: error 
+        ? 'rgb(var(--app-danger-color))' 
+        : state.isFocused 
+          ? 'rgb(var(--app-primary-color))' 
+          : 'rgb(var(--app-border-color))',
+      color: 'rgb(var(--app-text-color))',
+      borderRadius: 'var(--app-border-radius-md)',
+      boxShadow: state.isFocused ? '0 0 0 1px rgb(var(--app-primary-color))' : 'none',
+      '&:hover': {
+        borderColor: state.isFocused 
+          ? 'rgb(var(--app-primary-color))' 
+          : 'rgb(var(--app-text-color) / 0.5)'
+      },
+      minHeight: '2.5rem', // Match Tailwind h-10
+    }),
+    menu: (base: any) => ({
+      ...base,
+      backgroundColor: 'rgb(var(--app-card-bg-color))',
+      border: '1px solid rgb(var(--app-border-color))',
+      borderRadius: 'var(--app-border-radius-md)',
+      zIndex: 50,
+    }),
+    option: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: state.isSelected
+        ? 'rgb(var(--app-primary-color))'
+        : state.isFocused
+          ? 'rgb(var(--app-primary-color) / 0.1)'
+          : 'transparent',
+      color: state.isSelected
+        ? 'rgb(var(--app-primary-foreground-color))'
+        : 'rgb(var(--app-text-color))',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: 'rgb(var(--app-primary-color) / 0.2)'
+      }
+    }),
+    singleValue: (base: any) => ({
+      ...base,
+      color: 'rgb(var(--app-text-color))',
+    }),
+    input: (base: any) => ({
+      ...base,
+      color: 'rgb(var(--app-text-color))',
+    }),
+    placeholder: (base: any) => ({
+      ...base,
+      color: 'rgb(var(--app-text-color) / 0.5)',
+    }),
+  };
 
   return (
-    <div>
+    <div className={cn("w-full", className)}>
       {label && (
-        <label htmlFor={selectId} className="block text-sm font-medium text-text mb-1">
+        <label htmlFor={uniqueId} className="block text-sm font-medium text-foreground mb-1.5">
           {label}
         </label>
       )}
-      <div className="relative">
-        <select
-          id={selectId}
-          className={`${baseStyles} ${themeStyles} ${arrowStyles} ${className || ''}`}
-          {...props}
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      
+      <ReactSelect
+        instanceId={uniqueId}
+        styles={customStyles}
+        components={{ DropdownIndicator }}
+        options={options}
+        value={value}
+        onChange={(newValue) => onChange(newValue as SelectOption)}
+        isDisabled={isDisabled}
+        isLoading={isLoading}
+        isClearable={isClearable}
+        isSearchable={isSearchable}
+        placeholder={placeholder}
+        menuPortalTarget={typeof document !== 'undefined' ? document.body : null} 
+        menuPosition="fixed" 
+      />
+
+      {helperText && (
+        <p className={cn("mt-1.5 text-xs", error ? "text-destructive" : "text-muted-foreground")}>
+          {helperText}
+        </p>
+      )}
     </div>
   );
 };

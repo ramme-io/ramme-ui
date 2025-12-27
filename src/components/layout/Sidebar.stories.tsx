@@ -1,4 +1,3 @@
-// ramme-ui/src/layout/Sidebar.stories.tsx
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -6,7 +5,7 @@ import {
   Sidebar,
   SidebarProvider,
   useSidebar,
-  SidebarTrigger, // <-- 1. Import the trigger
+  SidebarTrigger,
 } from './Sidebar';
 
 // Import our new, updated content component
@@ -22,22 +21,32 @@ const meta: Meta<typeof Sidebar> = {
         <SidebarProvider>
           <div className="flex h-[800px] w-full bg-background">
             <Story /> {/* Renders <Sidebar> */}
-            <main className="flex-1 p-8 relative">
+            <main className="flex-1 p-8 relative flex flex-col">
               
-              {/* --- 2. ADD THE TRIGGER --- */}
-              {/* This is the hamburger button for mobile */}
-              <SidebarTrigger /> 
-
-              <div className="mt-8 md:mt-0">
+              <div className="flex items-center justify-between mb-8">
                 <h1 className="text-2xl font-bold">Main Content Area</h1>
-                <p className="text-muted-foreground">
-                  Use{' '}
-                  <kbd className="font-mono bg-muted text-muted-foreground p-1 rounded-md">
-                    Cmd+B
-                  </kbd>{' '}
-                  to toggle the sidebar.
-                </p>
+                {/* Mobile Trigger handles its own visibility (md:hidden) */}
+                <SidebarTrigger /> 
               </div>
+
+              <div className="prose dark:prose-invert max-w-none">
+                <p className="text-muted-foreground">
+                  This layout demonstrates the <strong>"Zero Jank"</strong> sidebar architecture.
+                </p>
+                <ul className="list-disc pl-5 mt-4 space-y-2 text-muted-foreground">
+                  <li>
+                    <strong>Ghost Spacer:</strong> Notice how the content doesn't "jump" when you toggle. 
+                    An invisible spacer reserves the room instantly.
+                  </li>
+                  <li>
+                    <strong>Text Handling:</strong> Labels fade out before the width collapses, preventing text wrapping/squishing.
+                  </li>
+                  <li>
+                    <strong>Mobile Overlay:</strong> Resize the window to mobile view to see the backdrop behavior.
+                  </li>
+                </ul>
+              </div>
+
             </main>
           </div>
         </SidebarProvider>
@@ -57,26 +66,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    // This story now correctly shows the sidebar
-    // in its default state (closed on mobile, collapsed on desktop)
     <Sidebar>
       <StorySidebarContent />
     </Sidebar>
   ),
 };
 
-// --- 3. REMOVED REDUNDANT STORY ---
-// We no longer need 'InitiallyCollapsed' because
-// our provider now defaults to 'isOpen: false'.
-
-// --- 4. (Optional) ADD AN "INITIALLY OPEN" STORY ---
-// This is a better test case
 export const InitiallyOpen: Story = {
   render: () => {
     const { setIsOpen } = useSidebar();
 
+    // Force open on mount for visual regression testing
     React.useEffect(() => {
-      // Set initial state to open
       setIsOpen(true);
     }, [setIsOpen]);
 

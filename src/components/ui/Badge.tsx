@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-
-const cn = (...classes: (string | undefined | null | false)[]) => {
-  return classes.filter(Boolean).join(' ');
-};
+import { cn } from '../../utils/cn'; // ✅ Use the powerful central utility
 
 // Define badge styles and variants using cva
 const badgeVariants = cva(
@@ -15,11 +12,12 @@ const badgeVariants = cva(
           'border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80',
         secondary:
           'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        // FIX: This now correctly uses our theme's 'destructive' color variables.
         danger:
           'border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80',
         success:
-          'border-transparent bg-accent text-accent-foreground shadow hover:bg-accent/80',
+          'border-transparent bg-success text-success-foreground shadow hover:bg-success/80', // ✅ Fixed: Use semantic success token
+        warning:
+          'border-transparent bg-warning text-warning-foreground shadow hover:bg-warning/80', // ✅ Added: Missing variant
         outline: 'text-foreground',
       },
     },
@@ -32,7 +30,7 @@ const badgeVariants = cva(
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
-    
+
 /**
  * @wizard
  * @name Badge
@@ -40,18 +38,29 @@ export interface BadgeProps
  * @tags ui, label, indicator
  * @props
  * - name: variant
- * type: "'primary' | 'secondary' | 'danger' | 'success' | 'outline'"
+ * type: "'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'outline'"
  * description: The visual style of the badge.
  * - name: children
  * type: React.ReactNode
  * description: The content to display inside the badge.
+ * - name: className
+ * type: string
+ * description: Optional additional CSS classes.
  * @category ui
  * @id badge
  */
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  );
-}
+export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
+  ({ className, variant, ...props }, ref) => {
+    return (
+      <div 
+        ref={ref} // ✅ Fixed: Forward ref to DOM element
+        className={cn(badgeVariants({ variant }), className)} 
+        {...props} 
+      />
+    );
+  }
+);
 
-export { Badge, badgeVariants };
+Badge.displayName = 'Badge';
+
+export { badgeVariants };

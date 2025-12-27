@@ -97,16 +97,34 @@ export const wizardManifest: WizardManifest = {
     {
       "id": "loader",
       "name": "Loader",
-      "version": "1.0.0",
-      "description": "A visual indicator used within an AI Message to show that a response is being generated.",
+      "version": "1.0.1",
+      "description": "A compact, theme-aware animation for indicating AI processing states. Optimized for chat interfaces.",
       "tags": [
         "ui",
         "ai",
         "feedback",
-        "loading"
+        "loading",
+        "chat"
       ],
       "category": "ai",
-      "props": [],
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"'bubble' | 'sparkle' | 'bar'\"",
+          "description": "The visual style. 'bubble' is standard for chat. 'sparkle' is for creative generation.",
+          "default": "'bubble'"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Optional text displayed next to the animation."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "Custom classes for the container."
+        }
+      ],
       "importPath": "./blocks/ai/Loader",
       "filePath": "src/blocks/ai/Loader.tsx"
     },
@@ -841,8 +859,8 @@ export const wizardManifest: WizardManifest = {
     {
       "id": "date-picker",
       "name": "DatePicker",
-      "version": "1.0.0",
-      "description": "A calendar-based input component for selecting single dates, with theme integration.",
+      "version": "1.0.2",
+      "description": "A theme-aware calendar input for selecting dates. Wraps react-datepicker to ensure consistent styling and \"Zero Jank\" layout stability.",
       "tags": [
         "form",
         "input",
@@ -851,66 +869,15 @@ export const wizardManifest: WizardManifest = {
         "ui"
       ],
       "category": "form",
-      "props": [
-        {
-          "name": "label",
-          "type": "string",
-          "description": "An optional label displayed above the date picker input field."
-        },
-        {
-          "name": "selected",
-          "type": "Date | null",
-          "description": "The currently selected date object, or `null` if no date is selected."
-        },
-        {
-          "name": "onChange",
-          "type": "(date: Date | null) => void",
-          "description": "Callback function triggered when a new date is selected."
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "description": "Optional additional CSS classes for the date picker's wrapper container."
-        },
-        {
-          "name": "dateFormat",
-          "type": "string",
-          "description": "The format string for displaying the date (e.g., 'MM/dd/yyyy', 'yyyy-MM-dd')."
-        },
-        {
-          "name": "showTimeSelect",
-          "type": "boolean",
-          "description": "If true, also allows time selection in addition to date selection."
-        },
-        {
-          "name": "isClearable",
-          "type": "boolean",
-          "description": "If true, displays a clear button to deselect the date."
-        },
-        {
-          "name": "placeholderText",
-          "type": "string",
-          "description": "Text displayed when no date is selected."
-        },
-        {
-          "name": "minDate",
-          "type": "Date",
-          "description": "The earliest selectable date."
-        },
-        {
-          "name": "maxDate",
-          "type": "Date",
-          "description": "The latest selectable date."
-        }
-      ],
+      "props": [],
       "importPath": "./components/forms/DatePicker",
       "filePath": "src/components/forms/DatePicker.tsx"
     },
     {
       "id": "file-upload",
       "name": "FileUpload",
-      "version": "1.0.0",
-      "description": "A component allowing users to upload files via drag-and-drop or a file browser, with support for multiple files and accepted types.",
+      "version": "1.0.1",
+      "description": "A modern drag-and-drop file upload area with visual feedback and file listing.",
       "tags": [
         "form",
         "input",
@@ -919,42 +886,15 @@ export const wizardManifest: WizardManifest = {
         "ui"
       ],
       "category": "form",
-      "props": [
-        {
-          "name": "onFileUpload",
-          "type": "(files: File[]) => void",
-          "description": "Callback function triggered when files are selected or dropped, providing an array of File objects."
-        },
-        {
-          "name": "multiple",
-          "type": "boolean",
-          "description": "If true, allows the user to select and upload multiple files.",
-          "default": "false"
-        },
-        {
-          "name": "acceptedFileTypes",
-          "type": "string",
-          "description": "A string specifying acceptable file types (e.g., \".pdf,.txt,.xml\", \"image/*\")."
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "description": "An optional label displayed above the file upload area."
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "description": "Optional additional CSS classes for custom styling of the file upload container."
-        }
-      ],
+      "props": [],
       "importPath": "./components/forms/FileUpload",
       "filePath": "src/components/forms/FileUpload.tsx"
     },
     {
       "id": "form-template",
       "name": "FormTemplate",
-      "version": "1.0.0",
-      "description": "A data-driven form builder that renders a grid of input fields from a configuration array, handling internal state and submission.",
+      "version": "1.0.1",
+      "description": "A data-driven form builder that renders a grid of input fields from a configuration array. Now supports File Uploads and Segmented Controls.",
       "tags": [
         "form",
         "template",
@@ -967,22 +907,17 @@ export const wizardManifest: WizardManifest = {
         {
           "name": "fields",
           "type": "FormField[]",
-          "description": "An array of field definition objects (name, label, type, etc.) that determine the form structure."
+          "description": "An array of field definition objects."
         },
         {
           "name": "onSubmit",
           "type": "(formData: Record<string, any>) => void",
-          "description": "Callback function triggered when the form is submitted, receiving the collected data."
+          "description": "Callback function triggered when the form is submitted."
         },
         {
           "name": "className",
           "type": "string",
           "description": "Optional additional CSS classes for the form container."
-        },
-        {
-          "name": "children",
-          "type": "React.ReactNode",
-          "description": "Content to render at the bottom of the form, typically used for action buttons like \"Save\" or \"Cancel\"."
         }
       ],
       "importPath": "./components/forms/FormTemplate",
@@ -1042,22 +977,6 @@ export const wizardManifest: WizardManifest = {
       ],
       "importPath": "./components/forms/Input",
       "filePath": "src/components/forms/Input.tsx"
-    },
-    {
-      "id": "multi-select",
-      "name": "MultiSelect",
-      "version": "1.0.0",
-      "description": "An enhanced dropdown that allows users to select multiple options from a searchable list.",
-      "tags": [
-        "form",
-        "input",
-        "select",
-        "dropdown"
-      ],
-      "category": "form",
-      "props": [],
-      "importPath": "./components/forms/MultiSelect",
-      "filePath": "src/components/forms/MultiSelect.tsx"
     },
     {
       "id": "radio",
@@ -1135,8 +1054,8 @@ export const wizardManifest: WizardManifest = {
     {
       "id": "segmented-control",
       "name": "SegmentedControl",
-      "version": "1.0.0",
-      "description": "A linear toggle component that functions like a radio group. Ideal for switching between discrete modes (e.g., \"Off / Auto / On\").",
+      "version": "1.0.1",
+      "description": "A theme-aware linear toggle component. Ideal for switching between discrete modes (e.g., \"Map / List\").",
       "tags": [
         "input",
         "toggle",
@@ -1144,89 +1063,10 @@ export const wizardManifest: WizardManifest = {
         "radio",
         "control"
       ],
-      "category": "input",
-      "props": [
-        {
-          "name": "options",
-          "type": "Array<{ label: string, value: string | number }>",
-          "description": "The list of segments to display."
-        },
-        {
-          "name": "value",
-          "type": "string | number",
-          "description": "The currently selected value."
-        },
-        {
-          "name": "onChange",
-          "type": "function",
-          "description": "Callback fired when a segment is selected."
-        },
-        {
-          "name": "size",
-          "type": "'sm' | 'md'",
-          "description": "The size of the control.",
-          "default": "'md'"
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "description": "Additional CSS classes."
-        }
-      ],
+      "category": "form",
+      "props": [],
       "importPath": "./components/forms/SegmentedControl",
       "filePath": "src/components/forms/SegmentedControl.tsx"
-    },
-    {
-      "id": "select",
-      "name": "Select",
-      "version": "1.0.0",
-      "description": "A standard HTML select dropdown component for choosing a single option from a list.",
-      "tags": [
-        "form",
-        "input",
-        "dropdown",
-        "ui"
-      ],
-      "category": "form",
-      "props": [
-        {
-          "name": "options",
-          "type": "{ value: string | number; label: string; }[]",
-          "description": "An array of objects defining the selectable options, each with a `value` and `label`."
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "description": "An optional label displayed above the select dropdown."
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "description": "A unique HTML `id` for the select element. Automatically generated if not provided."
-        },
-        {
-          "name": "className",
-          "type": "string",
-          "description": "Optional additional CSS classes for the select element."
-        },
-        {
-          "name": "value",
-          "type": "string | number | readonly string[]",
-          "description": "The currently selected option's value."
-        },
-        {
-          "name": "onChange",
-          "type": "(event: React.ChangeEvent<HTMLSelectElement>) => void",
-          "description": "Callback function triggered when the selected value changes."
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "If true, the select dropdown will be unclickable."
-        }
-      ],
-      "importPath": "./components/forms/Select",
-      "filePath": "src/components/forms/Select.tsx"
     },
     {
       "id": "textarea",
@@ -1362,17 +1202,6 @@ export const wizardManifest: WizardManifest = {
       ],
       "importPath": "./components/layout/SectionHeader",
       "filePath": "src/components/layout/SectionHeader.tsx"
-    },
-    {
-      "id": "sidebar",
-      "name": "Sidebar",
-      "version": "1.0.0",
-      "description": "A collapsible, responsive sidebar component.",
-      "tags": [],
-      "category": "",
-      "props": [],
-      "importPath": "./components/layout/Sidebar",
-      "filePath": "src/components/layout/Sidebar.tsx"
     },
     {
       "id": "breadcrumb-item",
@@ -1655,7 +1484,7 @@ export const wizardManifest: WizardManifest = {
     {
       "id": "badge",
       "name": "Badge",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "A small component to display a status, count, or label.",
       "tags": [
         "ui",
@@ -1666,13 +1495,18 @@ export const wizardManifest: WizardManifest = {
       "props": [
         {
           "name": "variant",
-          "type": "\"'primary' | 'secondary' | 'danger' | 'success' | 'outline'\"",
+          "type": "\"'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'outline'\"",
           "description": "The visual style of the badge."
         },
         {
           "name": "children",
           "type": "React.ReactNode",
           "description": "The content to display inside the badge."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "Optional additional CSS classes."
         }
       ],
       "importPath": "./components/ui/Badge",
@@ -2128,6 +1962,37 @@ export const wizardManifest: WizardManifest = {
       "props": [],
       "importPath": "./components/layout/Modal",
       "filePath": "src/components/layout/Modal.tsx"
+    },
+    {
+      "id": "sidebar",
+      "name": "Sidebar",
+      "version": "1.0.1",
+      "description": "A collapsible sidebar navigation component with support for branding, navigation items, and user profile.",
+      "tags": [
+        "layout",
+        "navigation",
+        "sidebar"
+      ],
+      "category": "layout",
+      "props": [
+        {
+          "name": "items",
+          "type": "SidebarItem[]",
+          "description": "Array of navigation items."
+        },
+        {
+          "name": "user",
+          "type": "SidebarUser",
+          "description": "User profile information for the footer."
+        },
+        {
+          "name": "activeItemId",
+          "type": "string",
+          "description": "ID of the currently active navigation item."
+        }
+      ],
+      "importPath": "./components/layout/Sidebar",
+      "filePath": "src/components/layout/Sidebar.tsx"
     }
   ],
   "utils": [],

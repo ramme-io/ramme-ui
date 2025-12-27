@@ -1,9 +1,9 @@
-import { type HTMLAttributes, type FC } from 'react';
+import React, { forwardRef } from 'react';
+import { cn } from '../../utils/cn'; // ✅ Use central utility
 
-// A utility for safely merging Tailwind classes.
-const cn = (...classes: (string | undefined | null | false)[]) => {
-  return classes.filter(Boolean).join(' ');
-};
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  // Extends standard div props
+}
 
 /**
  * @wizard
@@ -20,18 +20,23 @@ const cn = (...classes: (string | undefined | null | false)[]) => {
  * @category layout
  * @id card
  */
-export const Card: FC<HTMLAttributes<HTMLDivElement>> = ({
-  children,
-  className,
-  ...props
-}) => {
-  // Base styles use theme-aware Tailwind utilities directly.
-  // `rounded-md` now maps to our themeable `--app-border-radius-md` variable.
-  const baseStyles = 'bg-card border border-border rounded-md';
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          // Base Appearance
+          "bg-card text-card-foreground", // ✅ Ensures text matches background contrast
+          "rounded-lg border border-border shadow-sm", // ✅ Default modern style
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
-  return (
-    <div className={cn(baseStyles, className)} {...props}>
-      {children}
-    </div>
-  );
-};
+Card.displayName = "Card";

@@ -31,11 +31,9 @@ import { DatePicker } from './components/forms/DatePicker';
 import { FileUpload } from './components/forms/FileUpload';
 import { FormTemplate } from './components/forms/FormTemplate';
 import { Input } from './components/forms/Input';
-import { MultiSelect } from './components/forms/MultiSelect';
 import { Radio } from './components/forms/Radio';
 import { SearchInput } from './components/forms/SearchInput';
 import { SegmentedControl } from './components/forms/SegmentedControl';
-import { Select } from './components/forms/Select';
 import { Textarea } from './components/forms/Textarea';
 import { ToggleSwitch } from './components/forms/ToggleSwitch';
 import { AccordionItem } from './components/layout/Accordion';
@@ -147,9 +145,6 @@ export const AUTO_REGISTRY: Record<string, React.FC<any>> = {
   'formtemplate': FormTemplate,
   'Input': Input,
   'input': Input,
-  'MultiSelect': MultiSelect,
-  'multi-select': MultiSelect,
-  'multiselect': MultiSelect,
   'Radio': Radio,
   'radio': Radio,
   'SearchInput': SearchInput,
@@ -158,8 +153,6 @@ export const AUTO_REGISTRY: Record<string, React.FC<any>> = {
   'SegmentedControl': SegmentedControl,
   'segmented-control': SegmentedControl,
   'segmentedcontrol': SegmentedControl,
-  'Select': Select,
-  'select': Select,
   'Textarea': Textarea,
   'textarea': Textarea,
   'ToggleSwitch': ToggleSwitch,

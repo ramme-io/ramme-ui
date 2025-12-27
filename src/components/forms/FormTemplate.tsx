@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { Input } from '../forms/Input';
-import { Select } from '../forms/Select';
+import { Select, type SelectOption } from '../forms/Select';
 import { Checkbox } from '../forms/Checkbox';
 import { Radio } from '../forms/Radio';
 import { Textarea } from '../forms/Textarea';
@@ -9,8 +9,10 @@ import { ToggleSwitch } from '../forms/ToggleSwitch';
 import { ComboBox } from '../forms/ComboBox';
 import { MultiSelect, type MultiSelectOption } from '../forms/MultiSelect';
 import { DatePicker } from '../forms/DatePicker';
+import { FileUpload } from '../forms/FileUpload';
+import { SegmentedControl, type SegmentedControlOption } from '../forms/SegmentedControl';
 
-// --- TYPE DEFINITIONS (Remain the same) ---
+// --- TYPE DEFINITIONS ---
 
 interface FormFieldBase {
   name: string;
@@ -18,6 +20,8 @@ interface FormFieldBase {
   className?: string;
   disabled?: boolean;
   colSpan?: number;
+  helperText?: string;
+  required?: boolean;
 }
 
 interface FormInput extends FormFieldBase {
@@ -30,10 +34,6 @@ interface FormTextarea extends FormFieldBase {
   placeholder?: string;
   value?: string;
   rows?: number;
-}
-interface SelectOption {
-  value: string | number;
-  label: string;
 }
 interface FormSelect extends FormFieldBase {
   type: 'select';
@@ -64,11 +64,24 @@ interface FormMultiSelect extends FormFieldBase {
   type: 'multiselect';
   options: MultiSelectOption[];
   value?: MultiSelectOption[] | null;
+  placeholder?: string;
 }
 interface FormDatePicker extends FormFieldBase {
   type: 'datepicker';
   value?: Date | null;
   placeholder?: string;
+}
+// NEW: File Upload
+interface FormFileUpload extends FormFieldBase {
+  type: 'file';
+  multiple?: boolean;
+  acceptedFileTypes?: string;
+}
+// NEW: Segmented Control
+interface FormSegmentedControl extends FormFieldBase {
+  type: 'segment';
+  options: SegmentedControlOption[];
+  value?: string | number;
 }
 
 export type FormField =
@@ -80,49 +93,43 @@ export type FormField =
   | FormRadio
   | FormComboBox
   | FormMultiSelect
-  | FormDatePicker;
-
+  | FormDatePicker
+  | FormFileUpload
+  | FormSegmentedControl;
 
 // --- COMPONENT PROPS ---
 
 export interface FormTemplateProps {
   fields: FormField[];
   onSubmit: (formData: Record<string, any>) => void;
-  // Title and action buttons are now controlled by the parent component
   className?: string;
-  // Pass children to allow for custom button layouts
   children?: React.ReactNode;
 }
 
 /**
  * @wizard
  * @name FormTemplate
- * @description A data-driven form builder that renders a grid of input fields from a configuration array, handling internal state and submission.
+ * @description A data-driven form builder that renders a grid of input fields from a configuration array. Now supports File Uploads and Segmented Controls.
  * @category form
  * @tags form, template, builder, input, layout
  * @props
  * - name: fields
  * type: FormField[]
- * description: An array of field definition objects (name, label, type, etc.) that determine the form structure.
+ * description: An array of field definition objects.
  * - name: onSubmit
  * type: (formData: Record<string, any>) => void
- * description: Callback function triggered when the form is submitted, receiving the collected data.
+ * description: Callback function triggered when the form is submitted.
  * - name: className
  * type: string
  * description: Optional additional CSS classes for the form container.
- * - name: children
- * type: React.ReactNode
- * description: Content to render at the bottom of the form, typically used for action buttons like "Save" or "Cancel".
  * @id form-template
  */
-
-// --- REFACTORED COMPONENT ---
 
 export const FormTemplate: React.FC<FormTemplateProps> = ({
   fields,
   onSubmit,
   className,
-  children, // Accept children for actions
+  children,
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     const initialState: Record<string, any> = {};
@@ -133,6 +140,8 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         if (field.checked) {
           initialState[field.radioGroup] = field.value;
         }
+      } else if (field.type === 'file') {
+        initialState[field.name] = [];
       } else {
         initialState[field.name] = field.value || '';
       }
@@ -150,15 +159,24 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
   };
 
   const renderField = (field: FormField) => {
-    const commonProps = { id: field.name, label: field.label, className: field.className, disabled: field.disabled };
-    
+    const commonProps = { 
+      id: field.name, 
+      label: field.label, 
+      className: field.className, 
+      disabled: field.disabled,
+      helperText: field.helperText,
+      required: field.required
+    };
+
     switch (field.type) {
       case 'text': case 'email': case 'password': case 'number':
         return <Input {...commonProps} name={field.name} type={field.type} placeholder={field.placeholder} value={formData[field.name]} onChange={(e) => handleFieldChange(field.name, e.target.value)} />;
       case 'textarea':
         return <Textarea {...commonProps} name={field.name} placeholder={field.placeholder} value={formData[field.name]} onChange={(e) => handleFieldChange(field.name, e.target.value)} rows={field.rows} />;
       case 'select':
-        return <Select {...commonProps} name={field.name} options={field.options} value={formData[field.name]} onChange={(e) => handleFieldChange(field.name, e.target.value)} />;
+        // Updated to use the new React-Select wrapper which expects `onChange` to receive an object
+        const selectedOption = field.options.find(opt => opt.value === formData[field.name]);
+        return <Select {...commonProps} options={field.options} value={selectedOption} onChange={(opt) => handleFieldChange(field.name, opt?.value)} />;
       case 'checkbox':
         return <Checkbox {...commonProps} name={field.name} checked={formData[field.name]} onChange={(e) => handleFieldChange(field.name, e.target.checked)} />;
       case 'toggle':
@@ -168,16 +186,25 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
       case 'combobox':
         return <ComboBox {...commonProps} options={field.options} value={formData[field.name]} onOptionSelect={(value) => handleFieldChange(field.name, value)} placeholder={field.placeholder} />;
       case 'multiselect':
-        return <MultiSelect {...commonProps} options={field.options} value={formData[field.name]} onChange={(value) => handleFieldChange(field.name, value)} />;
+        return <MultiSelect {...commonProps} options={field.options} value={formData[field.name]} onChange={(value) => handleFieldChange(field.name, value)} placeholder={field.placeholder} />;
       case 'datepicker':
         return <DatePicker {...commonProps} selected={formData[field.name]} onChange={(date) => handleFieldChange(field.name, date)} placeholderText={field.placeholder} />;
+      // --- NEW TYPES ---
+      case 'file':
+        return <FileUpload {...commonProps} multiple={field.multiple} acceptedFileTypes={field.acceptedFileTypes} onFileUpload={(files) => handleFieldChange(field.name, files)} />;
+      case 'segment':
+        return (
+          <div className="space-y-1.5">
+             <label className="block text-sm font-medium text-foreground">{field.label}</label>
+             <SegmentedControl {...commonProps} options={field.options} value={formData[field.name]} onChange={(val) => handleFieldChange(field.name, val)} />
+             {field.helperText && <p className="text-xs text-muted-foreground">{field.helperText}</p>}
+          </div>
+        );
       default: return null;
     }
   };
 
   return (
-    // The Card, SectionHeader, and ActionBar are now removed.
-    // The component is a pure form with its field grid.
     <form onSubmit={handleSubmit} className={className}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {fields.map((field) => (
@@ -190,7 +217,6 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         ))}
       </div>
       
-      {/* Render custom action buttons passed as children */}
       {children && <div className="mt-8">{children}</div>}
     </form>
   );

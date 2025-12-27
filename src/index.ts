@@ -83,6 +83,7 @@ export * from './components/forms/ToggleSwitch';
 
 // hooks
 export * from './lib/hooks/useDataFetch';
+export * from './lib/hooks/useChartTheme'; // ✅ ADDED: Critical for Chart Theming
 
 // iot
 export * from './blocks/iot/DeviceCard';
@@ -112,3 +113,5 @@ export * from './components/ui/Badge';
 export * from './components/ui/Button';
 export * from './components/ui/Icon';
 
+// utils
+export * from './utils/cn'; // ✅ ADDED: Critical for Tailwind merging

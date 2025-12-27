@@ -9,7 +9,9 @@ interface ChartTheme {
 }
 
 export const useChartTheme = (): ChartTheme => {
-  const { theme } = useTheme();
+  // ✅ FIX: Destructure customTheme so we can react to it
+  const { theme, customTheme } = useTheme();
+  
   const [chartTheme, setChartTheme] = useState<ChartTheme>({
     textColor: 'rgb(33 37 41)',
     gridColor: 'rgb(233 236 239)',
@@ -18,19 +20,31 @@ export const useChartTheme = (): ChartTheme => {
   });
 
   useEffect(() => {
-    // This function runs on the client and can access computed styles
-    const computedStyle = getComputedStyle(document.documentElement);
-    
-    const paletteString = computedStyle.getPropertyValue('--app-chart-palette').trim();
-    const palette = paletteString ? paletteString.split(',').map(color => `rgb(${color.trim()})`) : [];
+    // Helper to safely get RGB values
+    const getVar = (name: string) => {
+        // We use document.documentElement because our ThemeProvider applies classes/styles there
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    };
 
-    setChartTheme({
-      textColor: `rgb(${computedStyle.getPropertyValue('--app-text-color').trim()})`,
-      gridColor: `rgb(${computedStyle.getPropertyValue('--app-chart-grid-color').trim()})`,
-      tooltipBg: `rgb(${computedStyle.getPropertyValue('--app-card-bg-color').trim()})`,
-      palette,
-    });
-  }, [theme]); // Re-run whenever the app theme changes
+    // ✅ FIX: Small timeout to ensure the DOM has updated with the new class/style
+    // before we read the computed values. This prevents reading "stale" colors.
+    const timer = setTimeout(() => {
+        const paletteString = getVar('--app-chart-palette');
+        const palette = paletteString 
+            ? paletteString.split(',').map(color => `rgb(${color.trim()})`) 
+            : [];
+
+        setChartTheme({
+          textColor: `rgb(${getVar('--app-text-color')})`,
+          gridColor: `rgb(${getVar('--app-chart-grid-color')})`,
+          tooltipBg: `rgb(${getVar('--app-card-bg-color')})`,
+          palette,
+        });
+    }, 10); // 10ms is enough to let the DOM settle
+
+    return () => clearTimeout(timer);
+
+  }, [theme, customTheme]); // ✅ FIX: Re-run when EITHER theme string OR custom object changes
 
   return chartTheme;
 };

@@ -1,3 +1,6 @@
+/* 1. LOAD THE FONTS (Critical for Theming) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&family=Merriweather:wght@300;700&family=Roboto+Mono:wght@400;500&family=Courier+Prime&display=swap');
+
 /* Import Tailwind base styles */
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -6,15 +9,12 @@
 /* Import styles for third-party libraries */
 @import 'ag-grid-community/styles/ag-grid.css';
 @import 'ag-grid-community/styles/ag-theme-quartz.css';
-@import 'react-datepicker/dist/react-datepicker.css';
 @import 'tippy.js/dist/tippy.css';
 
 /*
 ==============================================
-RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
+RAMME THEME V2.2 - CSS VARIABLE DEFINITIONS
 ==============================================
-- The :root selector defines the default 'light' theme.
-- Each subsequent theme class overrides these variables.
 */
 
 :root {
@@ -24,19 +24,28 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
 
   /* === LAYER 2: COLOR SYSTEM === */
-  --app-primary-color: 13 110 253;
+  --app-primary-color: 13 110 253; /* Blue-600 */
   --app-primary-foreground-color: 255 255 255;
-  --app-secondary-color: 108 117 125;
+  
+  --app-secondary-color: 108 117 125; /* Gray-500 */
   --app-secondary-foreground-color: 255 255 255;
-  --app-accent-color: 23 162 184;
+  
+  --app-accent-color: 23 162 184; /* Cyan-600 */
   --app-accent-foreground-color: 255 255 255;
+  
   --app-danger-color: 220 53 69;
   --app-danger-foreground-color: 255 255 255;
-  --app-text-color: 33 37 41;
+
+  /* Base UI Colors */
   --app-bg-color: 248 249 250;
   --app-card-bg-color: 255 255 255;
+  --app-text-color: 33 37 41;
   --app-border-color: 222 226 230;
-  
+
+  /* Muted Surface */
+  --app-muted-bg: 241 245 249; 
+  --app-muted-text: 100 116 139; 
+
   /* === LAYER 3: SHAPE & BORDERS === */
   --app-border-radius-sm: 0.2rem;
   --app-border-radius-md: 0.375rem;
@@ -56,38 +65,44 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-table-header-text: 73 80 87;
   --app-table-row-hover-bg: 233 236 239;
   --app-table-grid-line-color: 222 226 230;
-  --app-chart-palette: 13 110 253, 108 117 125, 23 162 184, 255 193 7, 220 53 69;
   --app-chart-grid-color: 233 236 239;
 
-    /* Notification Colors */
-  --app-info-color: 59 130 246; /* blue-500 */
+  /* Notification Colors */
+  --app-info-color: 59 130 246; 
   --app-info-foreground-color: 255 255 255;
-  --app-success-color: 34 197 94; /* green-500 */
+  --app-success-color: 34 197 94; 
   --app-success-foreground-color: 255 255 255;
-  --app-warning-color: 245 158 11; /* amber-500 */
+  --app-warning-color: 245 158 11; 
   --app-warning-foreground-color: 255 255 255;
 
-  /* Chart Colors */
-  --app-chart-1: 139 92 246; /* violet-500 */
-  --app-chart-2: 234 179 8; /* yellow-500 */
-  --app-chart-3: 163 230 53; /* lime-400 */
-  --app-chart-4: 52 211 153; /* emerald-400 */
-  --app-chart-5: 251 113 133; /* rose-400 */
+  /* Chart Colors (Synced with Brand) */
+  --app-chart-1: 13 110 253;  /* Primary (Blue) */
+  --app-chart-2: 23 162 184;  /* Accent (Cyan) */
+  --app-chart-3: 102 16 242;  /* Indigo */
+  --app-chart-4: 255 193 7;   /* Amber */
+  --app-chart-5: 220 53 69;   /* Red */
   
+  /* The Palette String used by JS Charts */
+  --app-chart-palette: 13 110 253, 23 162 184, 102 16 242, 255 193 7, 220 53 69;
 }
 
 /* --- Dark Theme --- */
 .dark {
-  --app-primary-color: 110 168 254;
+  color-scheme: dark; /* Helps browser native inputs */
+  --app-primary-color: 110 168 254; /* Blue-300 */
   --app-primary-foreground-color: 5 20 40;
   --app-secondary-color: 173 181 189;
   --app-secondary-foreground-color: 5 20 40;
   --app-accent-color: 77 189 207;
   --app-accent-foreground-color: 5 20 40;
+  
   --app-text-color: 233 236 239;
   --app-bg-color: 11 17 23;
   --app-card-bg-color: 26 35 46;
   --app-border-color: 73 80 87;
+
+  --app-muted-bg: 30 41 59; 
+  --app-muted-text: 148 163 184;
   
   --app-input-bg-color: 33 37 41;
   --app-input-text-color: 233 236 239;
@@ -99,46 +114,48 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-table-header-text: 206 212 218;
   --app-table-row-hover-bg: 52 58 64;
   --app-table-grid-line-color: 73 80 87;
-  --app-chart-palette: 110 168 254, 173 181 189, 77 189 207, 255 193 7, 220 53 69;
   --app-chart-grid-color: 52 58 64;
 
-    /* Notification Colors */
-  --app-info-color: 59 130 246; /* blue-500 */
+  --app-info-color: 59 130 246; 
   --app-info-foreground-color: 255 255 255;
-  --app-success-color: 34 197 94; /* green-500 */
+  --app-success-color: 34 197 94; 
   --app-success-foreground-color: 255 255 255;
-  --app-warning-color: 245 158 11; /* amber-500 */
+  --app-warning-color: 245 158 11; 
   --app-warning-foreground-color: 255 255 255;
 
-  /* Chart Colors */
-  --app-chart-1: 139 92 246; /* violet-500 */
-  --app-chart-2: 234 179 8; /* yellow-500 */
-  --app-chart-3: 163 230 53; /* lime-400 */
-  --app-chart-4: 52 211 153; /* emerald-400 */
-  --app-chart-5: 251 113 133; /* rose-400 */
+  /* Chart Colors (Lighter for Dark Mode) */
+  --app-chart-1: 110 168 254; /* Primary (Light Blue) */
+  --app-chart-2: 77 189 207;  /* Accent (Cyan) */
+  --app-chart-3: 167 139 250; /* Violet */
+  --app-chart-4: 252 211 77;  /* Amber */
+  --app-chart-5: 252 165 165; /* Rose */
+
+  --app-chart-palette: 110 168 254, 77 189 207, 167 139 250, 252 211 77, 252 165 165;
 }
 
-/* --- Corporate Theme --- */
+/* --- Corporate Theme (Green/Professional) --- */
 .corporate {
-  --app-font-sans: 'Lato', sans-serif;
-  --app-font-serif: 'Merriweather', serif;
-  --app-primary-color: 16 185 129;
+  --app-primary-color: 16 185 129; /* Emerald-500 */
   --app-primary-foreground-color: 255 255 255;
-  --app-secondary-color: 245 158 11;
+  --app-secondary-color: 245 158 11; /* Amber-500 */
   --app-secondary-foreground-color: 255 255 255;
-  --app-accent-color: 59 130 246;
+  --app-accent-color: 59 130 246; /* Blue-500 */
   --app-accent-foreground-color: 255 255 255;
+  
   --app-text-color: 55 65 81;
   --app-bg-color: 249 250 251;
   --app-card-bg-color: 255 255 255;
   --app-border-color: 209 213 219;
 
-  --app-border-radius-md: 0.25rem; /* Sharper corners */
+  --app-muted-bg: 243 244 246;
+  --app-muted-text: 107 114 128;
+
+  --app-border-radius-md: 0.25rem;
 
   --app-input-bg-color: 255 255 255;
   --app-input-text-color: 55 65 81;
   --app-input-border-color: 209 213 219;
-  --app-input-focus-ring-color: 59 130 246;
+  --app-input-focus-ring-color: 16 185 129; /* Green Ring */
   --app-input-placeholder-color: 156 163 175;
 
   --app-table-header-bg: 243 244 246;
@@ -147,38 +164,42 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-table-grid-line-color: 209 213 219;
   --app-chart-grid-color: 229 231 235;
 
-    /* Notification Colors */
-  --app-info-color: 59 130 246; /* blue-500 */
+  --app-info-color: 59 130 246;
   --app-info-foreground-color: 255 255 255;
-  --app-success-color: 34 197 94; /* green-500 */
+  --app-success-color: 34 197 94;
   --app-success-foreground-color: 255 255 255;
-  --app-warning-color: 245 158 11; /* amber-500 */
+  --app-warning-color: 245 158 11;
   --app-warning-foreground-color: 255 255 255;
 
-  /* Chart Colors */
-  --app-chart-1: 139 92 246; /* violet-500 */
-  --app-chart-2: 234 179 8; /* yellow-500 */
-  --app-chart-3: 163 230 53; /* lime-400 */
-  --app-chart-4: 52 211 153; /* emerald-400 */
-  --app-chart-5: 251 113 133; /* rose-400 */
+  /* Chart Colors (Earth Tones) */
+  --app-chart-1: 16 185 129; /* Emerald */
+  --app-chart-2: 245 158 11; /* Amber */
+  --app-chart-3: 59 130 246; /* Blue */
+  --app-chart-4: 107 114 128; /* Gray */
+  --app-chart-5: 239 68 68;  /* Red */
 
+  --app-chart-palette: 16 185 129, 245 158 11, 59 130 246, 107 114 128, 239 68 68;
 }
 
-/* --- Midnight Theme --- */
+/* --- Midnight Theme (Deep Purple/Indigo) --- */
 .midnight {
-  --app-font-sans: 'Roboto Mono', monospace;
-  --app-primary-color: 129 140 248;
+  color-scheme: dark;
+  --app-primary-color: 129 140 248; /* Indigo-400 */
   --app-primary-foreground-color: 30 41 59;
-  --app-secondary-color: 192 132 252;
+  --app-secondary-color: 192 132 252; /* Purple-400 */
   --app-secondary-foreground-color: 30 41 59;
-  --app-accent-color: 99 102 241;
+  --app-accent-color: 99 102 241; /* Indigo-500 */
   --app-accent-foreground-color: 255 255 255;
+  
   --app-text-color: 226 232 240;
   --app-bg-color: 15 23 42;
   --app-card-bg-color: 30 41 59;
   --app-border-color: 71 85 105;
 
-  --app-border-radius-md: 0.5rem; /* More rounded */
+  --app-muted-bg: 30 41 59; 
+  --app-muted-text: 148 163 184;
+
+  --app-border-radius-md: 0.5rem;
 
   --app-input-bg-color: 51 65 85;
   --app-input-text-color: 226 232 240;
@@ -192,37 +213,41 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-table-grid-line-color: 71 85 105;
   --app-chart-grid-color: 51 65 85;
 
-    /* Notification Colors */
-  --app-info-color: 59 130 246; /* blue-500 */
+  --app-info-color: 59 130 246;
   --app-info-foreground-color: 255 255 255;
-  --app-success-color: 34 197 94; /* green-500 */
+  --app-success-color: 34 197 94;
   --app-success-foreground-color: 255 255 255;
-  --app-warning-color: 245 158 11; /* amber-500 */
+  --app-warning-color: 245 158 11;
   --app-warning-foreground-color: 255 255 255;
 
-  /* Chart Colors */
-  --app-chart-1: 139 92 246; /* violet-500 */
-  --app-chart-2: 234 179 8; /* yellow-500 */
-  --app-chart-3: 163 230 53; /* lime-400 */
-  --app-chart-4: 52 211 153; /* emerald-400 */
-  --app-chart-5: 251 113 133; /* rose-400 */
+  /* Chart Colors (Neon/Cyber) */
+  --app-chart-1: 129 140 248; /* Indigo */
+  --app-chart-2: 192 132 252; /* Purple */
+  --app-chart-3: 45 212 191;  /* Teal */
+  --app-chart-4: 251 113 133; /* Rose */
+  --app-chart-5: 250 204 21;  /* Yellow */
+
+  --app-chart-palette: 129 140 248, 192 132 252, 45 212 191, 251 113 133, 250 204 21;
 }
 
-/* --- Blueprint Theme --- */
+/* --- Blueprint Theme (Technical Blue) --- */
 .blueprint {
-  --app-font-sans: 'Courier New', monospace;
-  --app-primary-color: 0 123 255;
+  --app-primary-color: 0 123 255; /* Tech Blue */
   --app-primary-foreground-color: 255 255 255;
   --app-secondary-color: 108 117 125;
   --app-secondary-foreground-color: 255 255 255;
   --app-accent-color: 23 162 184;
   --app-accent-foreground-color: 255 255 255;
+  
   --app-text-color: 51 51 51;
   --app-bg-color: 255 255 255;
   --app-card-bg-color: 255 255 255;
   --app-border-color: 0 123 255;
 
-  --app-border-radius-md: 0rem; /* No border radius */
+  --app-muted-bg: 230 230 230;
+  --app-muted-text: 100 100 100;
+
+  --app-border-radius-md: 0rem;
   --app-border-width: 2px;
 
   --app-input-bg-color: 255 255 255;
@@ -235,39 +260,58 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
   --app-table-header-text: 73 80 87;
   --app-table-row-hover-bg: 230 230 230;
   --app-table-grid-line-color: 0 123 255;
-  --app-chart-grid-color: 230 242 255; /* approx. rgba(0, 123, 255, 0.1) on white */
+  --app-chart-grid-color: 230 242 255;
 
-    /* Notification Colors */
-  --app-info-color: 59 130 246; /* blue-500 */
+  --app-info-color: 59 130 246;
   --app-info-foreground-color: 255 255 255;
-  --app-success-color: 34 197 94; /* green-500 */
+  --app-success-color: 34 197 94;
   --app-success-foreground-color: 255 255 255;
-  --app-warning-color: 245 158 11; /* amber-500 */
+  --app-warning-color: 245 158 11;
   --app-warning-foreground-color: 255 255 255;
 
-  /* Chart Colors */
-  --app-chart-1: 139 92 246; /* violet-500 */
-  --app-chart-2: 234 179 8; /* yellow-500 */
-  --app-chart-3: 163 230 53; /* lime-400 */
-  --app-chart-4: 52 211 153; /* emerald-400 */
-  --app-chart-5: 251 113 133; /* rose-400 */
-  
+  /* Chart Colors (Blue Monochromatic) */
+  --app-chart-1: 0 123 255;   /* Primary Blue */
+  --app-chart-2: 23 162 184;  /* Cyan */
+  --app-chart-3: 108 117 125; /* Gray */
+  --app-chart-4: 253 126 20;  /* Orange (Warning) */
+  --app-chart-5: 220 53 69;   /* Red (Error) */
+
+  --app-chart-palette: 0 123 255, 23 162 184, 108 117 125, 253 126 20, 220 53 69;
 }
 
-/* --- AG Grid Theme Overrides --- */
-:root .ag-theme-quartz {
-  --ag-font-family: var(--app-font-sans);
-  --ag-background-color: rgb(var(--app-card-bg-color));
-  --ag-foreground-color: rgb(var(--app-text-color));
-  --ag-border-color: transparent;
-  --ag-secondary-border-color: rgb(var(--app-table-grid-line-color));
-  --ag-header-background-color: rgb(var(--app-table-header-bg));
-  --ag-header-foreground-color: rgb(var(--app-table-header-text));
-  --ag-odd-row-background-color: rgb(var(--app-card-bg-color));
-  --ag-row-hover-color: rgb(var(--app-table-row-hover-bg));
-  --ag-selected-row-background-color: rgb(var(--app-primary-color));
-  --ag-selected-row-foreground-color: rgb(var(--app-primary-foreground-color));
-  --ag-range-selection-background-color: rgba(var(--app-primary-color), 0.2);
+/* === AG GRID THEME OVERRIDES ===
+   These are placed LAST to ensure they override the default Quartz styles.
+   We target the class directly to ensure it picks up the CSS variables
+   from whatever scope it resides in.
+
+   We use !important on the variables to ensure they override the 
+   defaults set by the ag-theme-quartz class itself.
+*/
+.ag-theme-quartz {
+  --ag-font-family: var(--app-font-sans) !important;
+  --ag-background-color: rgb(var(--app-card-bg-color)) !important;
+  --ag-foreground-color: rgb(var(--app-text-color)) !important;
+  --ag-border-color: transparent !important;
+  
+  /* Grid Lines */
+  --ag-secondary-border-color: rgb(var(--app-table-grid-line-color)) !important;
+  --ag-row-border-color: rgb(var(--app-table-grid-line-color)) !important;
+  
+  /* Headers */
+  --ag-header-background-color: rgb(var(--app-table-header-bg)) !important;
+  --ag-header-foreground-color: rgb(var(--app-table-header-text)) !important;
+  
+  /* Rows */
+  --ag-odd-row-background-color: rgb(var(--app-card-bg-color)) !important;
+  --ag-row-hover-color: rgb(var(--app-table-row-hover-bg)) !important;
+  
+  /* Selection */
+  --ag-selected-row-background-color: rgb(var(--app-primary-color)) !important;
+  --ag-selected-row-foreground-color: rgb(var(--app-primary-foreground-color)) !important;
+  --ag-range-selection-background-color: rgba(var(--app-primary-color), 0.2) !important;
+  
+  /* Inputs */
+  --ag-input-focus-border-color: rgb(var(--app-primary-color)) !important;
 }
 
 /* --- Custom Tippy.js Theme --- */
@@ -284,93 +328,3 @@ RAMME THEME V2.0 - CSS VARIABLE DEFINITIONS
 .tippy-box[data-theme~='ramme'][data-placement^='left'] > .tippy-arrow::before { border-left-color: rgb(var(--app-secondary-color)); }
 .tippy-box[data-theme~='ramme'][data-placement^='right'] > .tippy-arrow::before { border-right-color: rgb(var(--app-secondary-color)); }
 .tippy-content { padding: 0.5rem 0.75rem; }
-
-
-/* --- Custom React Datepicker Theme --- */
-.react-datepicker {
-  font-family: var(--app-font-sans);
-  background-color: rgb(var(--app-card-bg-color));
-  border: var(--app-border-width) solid rgb(var(--app-border-color));
-  color: rgb(var(--app-text-color));
-}
-.react-datepicker__header {
-  background-color: rgb(var(--app-bg-color));
-  border-bottom: var(--app-border-width) solid rgb(var(--app-border-color));
-}
-.react-datepicker__current-month, .react-datepicker__day-name {
-  color: rgb(var(--app-text-color));
-}
-.react-datepicker__day {
-  color: rgb(var(--app-text-color));
-}
-.react-datepicker__day:hover {
-  background-color: rgb(var(--app-table-row-hover-bg));
-}
-.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected, .react-datepicker__day--in-range {
-  background-color: rgb(var(--app-primary-color));
-  color: rgb(var(--app-primary-foreground-color));
-}
-.react-datepicker__day--disabled {
-  opacity: 0.5;
-}
-
-/* --- Custom React-Select Theme --- */
-.ramme-select__control {
-  background-color: rgb(var(--app-input-bg-color)) !important;
-  border-color: rgb(var(--app-input-border-color)) !important;
-  box-shadow: none !important;
-  min-height: 40px;
-}
-
-.ramme-select__control--is-focused {
-  border-color: rgb(var(--app-primary-color)) !important;
-  box-shadow: 0 0 0 1px rgb(var(--app-primary-color)) !important;
-}
-
-.ramme-select__input-container,
-.ramme-select__placeholder,
-.ramme-select__single-value {
-  color: rgb(var(--app-text-color)) !important;
-}
-
-.ramme-select__menu {
-  background-color: rgb(var(--app-card-bg-color)) !important;
-  border: 1px solid rgb(var(--app-border-color)) !important;
-}
-
-.ramme-select__option {
-  background-color: transparent !important;
-  color: rgb(var(--app-text-color)) !important;
-}
-
-.ramme-select__option--is-focused {
-  background-color: rgb(var(--app-accent-color)) !important;
-  color: rgb(var(--app-accent-foreground-color)) !important;
-}
-
-.ramme-select__option--is-selected {
-  background-color: rgb(var(--app-primary-color)) !important;
-  color: rgb(var(--app-primary-foreground-color)) !important;
-}
-
-.ramme-select__multi-value {
-  background-color: rgb(var(--app-secondary-color)) !important;
-  color: rgb(var(--app-secondary-foreground-color)) !important;
-}
-
-.ramme-select__multi-value__label {
-  color: rgb(var(--app-secondary-foreground-color)) !important;
-}
-
-.ramme-select__multi-value__remove:hover {
-  background-color: rgb(var(--app-danger-color)) !important;
-  color: rgb(var(--app-danger-foreground-color)) !important;
-}
-
-
-
-
-
-
-
-

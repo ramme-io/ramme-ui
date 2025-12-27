@@ -1,7 +1,7 @@
-// src/components/forms/FileUpload.tsx
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Button } from '../ui/Button';
-import { Card }from '../layout/Card';
+import { Icon } from '../ui/Icon';
+import { cn } from '../../utils/cn';
 
 interface FileUploadProps {
   onFileUpload: (files: File[]) => void;
@@ -9,43 +9,28 @@ interface FileUploadProps {
   acceptedFileTypes?: string;
   label?: string;
   className?: string;
+  helperText?: string;
 }
 
 /**
  * @wizard
  * @name FileUpload
- * @description A component allowing users to upload files via drag-and-drop or a file browser, with support for multiple files and accepted types.
+ * @description A modern drag-and-drop file upload area with visual feedback and file listing.
  * @tags form, input, upload, files, ui
- * @props
- * - name: onFileUpload
- * type: (files: File[]) => void
- * description: Callback function triggered when files are selected or dropped, providing an array of File objects.
- * - name: multiple
- * type: boolean
- * description: If true, allows the user to select and upload multiple files.
- * default: false
- * - name: acceptedFileTypes
- * type: string
- * description: A string specifying acceptable file types (e.g., ".pdf,.txt,.xml", "image/*").
- * - name: label
- * type: string
- * description: An optional label displayed above the file upload area.
- * - name: className
- * type: string
- * description: Optional additional CSS classes for custom styling of the file upload container.
  * @category form
  * @id file-upload
  */
-
 export const FileUpload: React.FC<FileUploadProps> = ({
   onFileUpload,
   multiple = false,
   acceptedFileTypes,
   label,
   className,
+  helperText
 }) => {
   const [dragActive, setDragActive] = useState(false);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -57,52 +42,108 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     }
   }, []);
 
+  const handleFiles = (files: File[]) => {
+    setUploadedFiles(prev => multiple ? [...prev, ...files] : [files[0]]);
+    onFileUpload(files);
+  };
+
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      onFileUpload(Array.from(e.dataTransfer.files));
-      e.dataTransfer.clearData();
+      handleFiles(Array.from(e.dataTransfer.files));
     }
-  }, [onFileUpload]);
+  }, [multiple]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0) {
-      onFileUpload(Array.from(e.target.files));
+      handleFiles(Array.from(e.target.files));
     }
-  }, [onFileUpload]);
+  }, [multiple]);
 
-  const onButtonClick = () => {
-    inputRef.current?.click();
+  const removeFile = (indexToRemove: number) => {
+    setUploadedFiles(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
   return (
-    <Card className={`p-6 border-dashed border-2 ${dragActive ? 'border-primary' : 'border-border'} ${className || ''}`}>
-      {label && <label className="block text-sm font-medium text-text mb-2">{label}</label>}
+    <div className={cn("w-full", className)}>
+      {label && (
+        <label className="block text-sm font-medium text-foreground mb-1.5">
+          {label}
+        </label>
+      )}
+      
       <div
-        className={`flex flex-col items-center justify-center p-6 text-center cursor-pointer rounded-md ${dragActive ? 'bg-primary/10' : 'bg-background/50'}`}
+        className={cn(
+          "relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg transition-colors duration-200 ease-in-out cursor-pointer",
+          dragActive 
+            ? "border-primary bg-primary/5" 
+            : "border-border bg-card hover:bg-muted/50",
+          "min-h-[150px]"
+        )}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
+        onClick={() => inputRef.current?.click()}
       >
         <input
-          type="file"
-          id="file-upload-input"
           ref={inputRef}
+          type="file"
+          className="hidden"
           multiple={multiple}
           accept={acceptedFileTypes}
           onChange={handleChange}
-          className="hidden"
         />
-        <p className="text-text mb-2">Drag & Drop files here or</p>
-        <Button onClick={onButtonClick} variant="secondary">
-          Browse Files
-        </Button>
-        {acceptedFileTypes && <p className="text-sm text-text-light mt-2">Accepted: {acceptedFileTypes}</p>}
+        
+        <div className="bg-muted p-3 rounded-full mb-3">
+          <Icon name="upload-cloud" className="h-6 w-6 text-muted-foreground" />
+        </div>
+        
+        <p className="text-sm font-medium text-foreground text-center">
+          <span className="text-primary font-semibold hover:underline">Click to upload</span> or drag and drop
+        </p>
+        
+        <p className="text-xs text-muted-foreground mt-1">
+          {acceptedFileTypes ? acceptedFileTypes.replace(/,/g, ', ') : 'Any file type'} 
+          {multiple ? '' : ' (Single file)'}
+        </p>
       </div>
-    </Card>
+
+      {/* File List Preview */}
+      {uploadedFiles.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {uploadedFiles.map((file, idx) => (
+            <div key={`${file.name}-${idx}`} className="flex items-center justify-between p-2 rounded-md border border-border bg-card">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="bg-primary/10 p-2 rounded text-primary">
+                  <Icon name="file" className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
+                  <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(1)} KB</p>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                onClick={(e) => { e.stopPropagation(); removeFile(idx); }}
+              >
+                <Icon name="x" className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {helperText && (
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          {helperText}
+        </p>
+      )}
+    </div>
   );
 };
