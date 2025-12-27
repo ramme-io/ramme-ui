@@ -150,7 +150,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <SidebarContext.Provider value={{ collapsed, toggleCollapsed, activeItemId }}>
       <div
         className={cn(
-          "flex h-screen flex-col border-r bg-card transition-all duration-300",
+          "relative flex h-screen flex-col border-r bg-card transition-all duration-300",
           collapsed ? "w-16" : "w-64",
           className
         )}

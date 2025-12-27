@@ -58,6 +58,9 @@ module.exports = {
           5: 'rgb(var(--app-chart-5) / <alpha-value>)',
         },
       },
+      borderColor: {
+        DEFAULT: 'rgb(var(--app-border-color) / <alpha-value>)',
+      },
       borderRadius: {
         lg: `var(--app-border-radius-lg)`,
         md: `var(--app-border-radius-md)`,
